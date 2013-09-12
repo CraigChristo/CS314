@@ -3,17 +3,9 @@ package PA1.Model;
 import PA1.Manager.ManagementException;
 
 public class CruiseSection extends Section{
-	private static final int MAXROWS = 100;
-	private static final int MINROWS = 1;
-	private static final int MAXCOLUMNS = 10;
-	private static final int MINCOLUMNS = 1;
 	
-	private SeatClass type;
-	private int rows;
-	private int columns;
-	private Flight flight;
-	private boolean isEmpty;
-	private Seat[][] seatArray;
+	private CruiseCabinClass type;
+	private Cruise trip;
 	
 	/*Constructor.
 	 * IMPORTANT: When you instantiate a FlightSection, it automatically adds itself to the Flight that you specify.
@@ -22,7 +14,7 @@ public class CruiseSection extends Section{
 	 * type (first, business, economy), but only if the previous FlightSection has no booked seats.
 	 * Any violations of the above throws a ManagementException.
 	 */
-	public CruiseSection(CruiseTrip tripArg,  int rowsArg, int columnsArg, CabinClass typeArg) throws ManagementException
+	public CruiseSection(CruiseTrip tripArg,  int rowsArg, int columnsArg, CruiseCabinClass typeArg) throws ManagementException
 	{
 		super(tripArg, rowsArg, columnsArg, typeArg);
 	}
@@ -33,7 +25,7 @@ public class CruiseSection extends Section{
 		return SeatClassToString(this.type);
 	}
 	
-	public static String SeatClassToString(CabinClass type)
+	public static String SeatClassToString(CruiseCabinClass type)
 	{
 		switch(type){
 			case single: return "single cabin";

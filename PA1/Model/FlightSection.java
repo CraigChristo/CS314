@@ -27,7 +27,7 @@ public class FlightSection extends Section{
 	private static final int MAXCOLUMNS = 10;
 	private static final int MINCOLUMNS = 1;
 	
-	private SeatClass type;
+	private AirSeatClass type;
 	private int rows;
 	private int columns;
 	private Flight flight;
@@ -41,7 +41,7 @@ public class FlightSection extends Section{
 	 * type (first, business, economy), but only if the previous FlightSection has no booked seats.
 	 * Any violations of the above throws a ManagementException.
 	 */
-	public FlightSection(Flight flightArg,  int rowsArg, int columnsArg, SeatClass typeArg) throws ManagementException
+	public FlightSection(Flight flightArg,  int rowsArg, int columnsArg, AirSeatClass typeArg) throws ManagementException
 	{
 		super(flightArg, rowsArg, columnsArg, typeArg);
 	}
@@ -52,7 +52,7 @@ public class FlightSection extends Section{
 		return SeatClassToString(this.type);
 	}
 	
-	public static String SeatClassToString(SeatClass type)
+	public static String SeatClassToString(AirSeatClass type)
 	{
 		switch(type){
 			case first: return "first class";

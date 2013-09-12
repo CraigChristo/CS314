@@ -2,7 +2,7 @@ package PA1.UI;
 
 import PA1.Tests;
 import PA1.Manager.SystemManager;
-import PA1.Model.SeatClass;
+import PA1.Model.AirSeatClass;
 
 public class MenuOptions {
 	
@@ -10,7 +10,7 @@ public class MenuOptions {
 	
 	public MenuOptions(SystemManager m) { manager = m; }
 	
-	public final MenuItem[] main = {
+	public final MenuItem[] admin = {
 			
 		new MenuItem("Manage " + Menu.getString("PORT") + "s") {
 			public void run() {
@@ -24,7 +24,7 @@ public class MenuOptions {
 			}
 		},
 		
-		new MenuItem("Manage bookings") {
+		new MenuItem("Manage Bookings") {
 			public void run() {
 				Menu.open(booking);
 			}
@@ -38,7 +38,7 @@ public class MenuOptions {
 		
 		new MenuItem("Run tests") {
 			public void run() {
-				(new Tests(manager)).testEnums();
+				(new Tests(manager)).run();
 			}
 		}
 		
@@ -104,7 +104,7 @@ public class MenuOptions {
 				int cols = Menu.promptInt("Enter number of columns");
 				String tier = Menu.promptString("Enter class [" + manager.enumStrings() + "]");
 				
-				manager.createSection(line,name,rows,cols,SeatClass.valueOf(tier));
+				manager.createSection(line,name,rows,cols,AirSeatClass.valueOf(tier));
 			}
 		},
 		
@@ -152,7 +152,7 @@ public class MenuOptions {
 				int row = Menu.promptInt("Enter row");
 				char col = Menu.promptString("Enter column").charAt(0);
 				//TODO SeatClass is hardcoded
-				manager.bookSeat(line,name,SeatClass.valueOf(tier),row,col);
+				manager.bookSeat(line,name,AirSeatClass.valueOf(tier),row,col);
 			}
 		},
 		

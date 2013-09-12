@@ -84,7 +84,7 @@ public class Line {
 			if(existingTrip != null)
 			{
 				//Then the flight must already exist if existingFlight is not null
-				throw new ManagementException("You are attempting to add " + tripArg + ", but a trip with that ID is already registered with that " + this.getClass().getName() + ". " +existingTrip.getId() + existingTrip.getDestination()	);
+				throw new ManagementException("You are attempting to add " + tripArg + ", but a trip with that ID is already registered with the ID " + existingTrip.getId() + " to "  + existingTrip.getDestination()	);
 			}
 			
 			//If the above test passed, then we can accept the flight for this Airline.

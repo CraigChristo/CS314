@@ -76,7 +76,6 @@ public class Trip {
 		{
 			throw new ManagementException("You are attempting to create " + this.toString() + ", but no date was given.");
 		}
-		
 		//Flights cannot have the same origin and destination.
 		if(originArg == destinationArg)
 		{
@@ -101,7 +100,7 @@ public class Trip {
 		
 		//Add the flight to the Airline. This will throw an error if the airline already has a flight with this id.
 		//This constructor will throw that error again up to whoever called it.
-		owner.addTrip(this);	
+		owner.addTrip(this);		
 	}
 	
 	//Performs a check on the ID.
@@ -139,7 +138,7 @@ public class Trip {
 	}
 	
 	//Books a seat in the given row and column of the given section
-	public void bookSeat(SeatClass sectionType, int row, char col) throws ManagementException
+	public void bookSeat(AirSeatClass sectionType, int row, char col) throws ManagementException
 	{
 		Section desiredSection = null;
 		

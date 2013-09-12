@@ -20,7 +20,7 @@ public class Section {
 	private static final int MAXCOLUMNS = 10;
 	private static final int MINCOLUMNS = 1;
 	
-	private Enum type;//TODO
+	private Tier type;
 	private int rows;
 	private int columns;
 	private Trip trip;
@@ -34,7 +34,7 @@ public class Section {
 	 * type (first, business, economy), but only if the previous FlightSection has no booked seats.
 	 * Any violations of the above throws a ManagementException.
 	 */
-	public Section(Trip tripArg,  int rowsArg, int columnsArg, Enum typeArg) throws ManagementException//TODO
+	public Section(Trip tripArg,  int rowsArg, int columnsArg, Tier typeArg) throws ManagementException
 	{
 		//Check to see if the flight is null
 		if(tripArg == null)
@@ -91,7 +91,8 @@ public class Section {
 				if(currentSection.isEmpty())
 				{ 
 					//It was empty, replace it.
-					currentSection = this;
+
+					sectionList.set(sectionList.indexOf(currentSection), this);
 				}
 				else
 				{ 
@@ -136,6 +137,7 @@ public class Section {
 		int y = colToY(col);
 		
 		seatArray[x][y].setBooked(true);
+		isEmpty = false;
 	}
 	
 	public void bookSeat(int row, int col) throws ManagementException
@@ -149,9 +151,13 @@ public class Section {
 		return SeatClassToString(this.type);
 	}
 	
-	public static String SeatClassToString(Enum type)//TODO
+	public static String SeatClassToString(Tier type)//TODO
 	{
-		return"class unspecified for generic section type";
+		try {
+			return type.toString();
+		} catch (Exception e) {
+			return"class unspecified for generic section type";
+		}
 	}
 	
 	//Returns a string of the details for every seat
@@ -206,7 +212,7 @@ public class Section {
 		return trip;
 	}
 	
-	public Enum getType()//TODO
+	public Tier getType()
 	{
 		return type;
 	}
@@ -228,7 +234,7 @@ public class Section {
 	
 	protected int colToY(char col)
 	{
-		return col - 'A';
+		return Character.toUpperCase(col) - 'A';
 	}
 	
 	protected int colToY(int col)

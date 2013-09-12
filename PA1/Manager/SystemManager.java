@@ -11,42 +11,37 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import PA1.Model.Tier;
-import PA1.Model.Line;
-import PA1.Model.Port;
-import PA1.Model.SeatClass;
-import PA1.Model.Section;
-import PA1.Model.Trip;
-/* The SystemManager is the controlling mechanism for
- * Airport, Airline, Flight, FlightSection, and Seat.
- * The SystemManager will convert their parameters into a 
+import PA1.Model.*;
+/* The SystemManager controls all system operations
+ * The SystemManager will convert parameters into a 
  * more Object-Oriented form before passing them onto the
  * other classes.
  */
 public class SystemManager {
 	
-	public static enum strings {
-		PORT("Airport"),
-		TRIP("Flight"),
-		TRIPS("Flights"),
-		SECTION("Flight Section"),
-		SEAT("Seat"),
-		LINE("Airline");
+	@SuppressWarnings("rawtypes")
+	public static enum classes {
+		PORT(Airport.class),
+		TRIP(Flight.class),
+		SECTION(FlightSection.class),
+		SEAT(AirSeatClass.class),
+		LINE(Airline.class);	
 		
-		
-		private String name;
-		private strings(String s) {
-			name = s;
+		private Class c;
+		private classes(Class s) {
+			c = s;
+		}
+		public Class get() {
+			return c;
 		}
 		public String toString() {
-			return name;
+			return c.toString();
 		}
 	}
 	
-	//TODO the enum class is hardcoded
 	public String enumStrings() {
 		String s = new String();
-		for (Tier e : SeatClass.class.getEnumConstants()) 
+		for (Object e : classes.SEAT.get().getEnumConstants()) 
 			s += e.toString() + ", ";
 		return s;
 	}
@@ -60,14 +55,15 @@ public class SystemManager {
 		lineDictionary = new Hashtable<String, Line>();
 	}
 
-	//Creates a new Airport. Returns null if there is an error during construction.
+	//Creates a new port. Returns null if there is an error during construction.
 	public Port createPort(String idArg)
 	{
 		Port newPort;
+		idArg = idArg.toUpperCase();
 
 		try
 		{
-			newPort = new Port(idArg);
+			newPort = new Port(idArg); 
 			portDictionary.put(idArg, newPort);
 		}
 		catch(ManagementException me)
@@ -83,6 +79,7 @@ public class SystemManager {
 	public Line createLine(String idArg)
 	{
 		Line newLine;
+		idArg = idArg.toUpperCase();
 
 		try
 		{
@@ -123,8 +120,8 @@ public class SystemManager {
 			Port destinationPort = findPort(destPort);
 			Line line = findLine(lineName);
 			
-			//The Flight constructor adds the given flight to the owning airlines flight list
 			newTrip = new Trip(line, originalPort, destinationPort, date, tripIdArg);
+		
 		}
 		catch(Exception e)
 		{
@@ -137,7 +134,7 @@ public class SystemManager {
 	}
 
 	//Creates a seating section given the airline name, flight id, number of rows and columns and the class of the seating section
-	public Section createSection(String lineName, String tripID, int rows, int cols, SeatClass sectionType)
+	public Section createSection(String lineName, String tripID, int rows, int cols, AirSeatClass sectionType)
 	{
 		Section newSection;
 
@@ -205,21 +202,12 @@ public class SystemManager {
 			System.out.println(me);
 			tripIds = null;
 		}
-
-		if(tripIds != null)
-		{
-			//Print all flights that match that given criteria
-			for(String currentTrip : tripIds)
-			{
-				System.out.println(currentTrip);
-			}
-		}
 		
 		return tripIds;
 	}
 
 	//Attempt to book a seat on a given airline's flight in the row and column of a given section
-	public boolean bookSeat(String lineName, String tripID, SeatClass sectionType, int row, char column)
+	public boolean bookSeat(String lineName, String tripID, AirSeatClass sectionType, int row, char column)
 	{
 		//Check to make sure strings are not null before converting them to objects
 		if(lineName == null) System.out.println("You are attempting to book a seat, but no airline was specified.");

@@ -91,7 +91,7 @@ public class Menu {
 	}
 	
 	public static String getString(String in) {
-		return SystemManager.strings.valueOf(in).toString();
+		return SystemManager.classes.valueOf(in).toString();
 	}
 	
 	public static void goUp() {
