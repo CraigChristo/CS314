@@ -1,5 +1,5 @@
 package PA1.Model;
 
-public enum CabinClass {
+public enum CabinClass implements Tier {
 	single, family
 }

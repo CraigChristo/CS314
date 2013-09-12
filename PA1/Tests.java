@@ -4,7 +4,21 @@ import PA1.Manager.SystemManager;
 import PA1.Model.SeatClass;
 
 public class Tests {
-	private SystemManager res = new SystemManager();
+	private SystemManager res;
+	
+	public Tests() { res = new SystemManager(); }
+	
+	public Tests(SystemManager man) {
+		res = man;
+	}
+	
+	public void testEnums() {
+		res.createPort("DIA");
+		res.createPort("SFO");
+		res.createLine("FRONT");
+		res.createTrip("FRONT","DIA","SFO",2014,15,4,"123");
+		res.createSection("FRONT", "123", 6, 5, SeatClass.valueOf("first") );
+	}
 	
 	public void run() {
 		////Create airports
@@ -26,11 +40,11 @@ public class Tests {
 		res.createLine("SWEST");
 		res.createLine("AMER");
 		res.createLine("FRONT");
-		res.createLine("FRONTIER"); //invalid//Create flights
+		res.createLine("FRONTIER"); //invalid
+		//Create flights
 		res.createTrip("DELTA", "DEN", "LON", 2009, 10, 10, "123");
 		res.createTrip("DELTA", "DEN", "DEH", 2009, 8, 8, "567");
-		res.createTrip("DELTA", "DEN", "NCE", 2010, 9, 8, "567"); 
-		//invalid
+		res.createTrip("DELTA", "DEN", "NCE", 2010, 9, 8, "567"); 		//invalid
 		res.createTrip("JET", "LON", "DEN", 2009, 5, 7, "123");
 		res.createTrip("AMER", "DEN", "LON", 2010, 10, 1, "123");
 		res.createTrip("JET", "DEN", "LON", 2010, 6, 10, "786");
@@ -41,8 +55,8 @@ public class Tests {
 		res.createSection("JET","123", 2, 3, SeatClass.first);
 		res.createSection("DELTA","123", 1, 1, SeatClass.business);
 		res.createSection("DELTA","123", 1, 2, SeatClass.economy);
-		res.createSection("SWSERTT","123", 5, 5, SeatClass.economy); 
-		//invalid
+		res.createSection("SWSERTT","123", 5, 5, SeatClass.economy);		//invalid
+		//Book seats
 		res.displaySystemDetails();
 		res.findAvailableTrips("DEN", "LON");
 		res.bookSeat("DELTA", "123", SeatClass.business, 1, 'A');

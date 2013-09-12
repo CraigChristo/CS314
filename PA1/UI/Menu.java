@@ -1,5 +1,6 @@
 package PA1.UI;
 
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -28,10 +29,19 @@ public class Menu {
 	        print();
 	        System.out.println();
 	        System.out.print("  Select an option: ");
-	        int option = sc.nextInt();
-	        sc.nextLine();
-	        System.out.println();
-	        if (!run(option)) System.out.println(option + " is not a valid option.");
+	
+	        try {
+	        	int option = sc.nextInt();
+		        sc.nextLine();
+		        System.out.println();
+		        
+		        if (!run(option)) System.out.println(option + " is not a valid option.");
+		        System.out.println();
+		        
+	        } catch (InputMismatchException e) {
+	        	sc.nextLine();
+	        	System.out.println("\nPlease enter a number\n");
+	        }
         }
 	}
 	

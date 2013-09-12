@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import PA1.Model.Tier;
 import PA1.Model.Line;
 import PA1.Model.Port;
 import PA1.Model.SeatClass;
@@ -40,6 +41,14 @@ public class SystemManager {
 		public String toString() {
 			return name;
 		}
+	}
+	
+	//TODO the enum class is hardcoded
+	public String enumStrings() {
+		String s = new String();
+		for (Tier e : SeatClass.class.getEnumConstants()) 
+			s += e.toString() + ", ";
+		return s;
 	}
 
 	private Hashtable<String, Port> portDictionary;
