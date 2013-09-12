@@ -1,8 +1,4 @@
-package PA1.Models;
-/* ASSIGNMENT 1
-* File: Flight.java
-* Date: 08/28/2012
-*/
+package PA1.Model;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,8 +15,7 @@ import PA1.Manager.ManagementException;
  * FlightSections. A Flight also must belong to an airline. 
  */
 
-public class Flight {
-
+public class Trip {
 	//Define the maximum and minimum number of ID characters,
 	public final static int MAXIDCHARS = 6;
 	public final static int MINIDCHARS = 3;
@@ -32,18 +27,18 @@ public class Flight {
 	public final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	private String id;
-	private Airline owner;
-	private Airport origin;
-	private Airport destination;
+	private Line owner;
+	private Port origin;
+	private Port destination;
 	private Calendar date;
-	private LinkedList<FlightSection> sections;
+	private LinkedList<Section> sections;
 	
 	/*Constructs new Flight objects.
 	*There are restrictions on flight ids, which are enforced in the constructor.
 	*The max and min characters are defined statically, and requirements are
 	*handled through a separate checking method, for easy modularity.
 	*/
-	public Flight(Airline ownerArg, Airport originArg, Airport destinationArg, Calendar dateArg, String idArg) throws ManagementException
+	public Trip(Line ownerArg, Port originArg, Port destinationArg, Calendar dateArg, String idArg) throws ManagementException
 	{
 		//Check to see if the string is null
 		if(idArg == null)
@@ -102,11 +97,11 @@ public class Flight {
 		origin = originArg;
 		destination = destinationArg;
 		date = dateArg;
-		sections = new LinkedList<FlightSection>();
+		sections = new LinkedList<Section>();
 		
 		//Add the flight to the Airline. This will throw an error if the airline already has a flight with this id.
 		//This constructor will throw that error again up to whoever called it.
-		owner.addFlight(this);	
+		owner.addTrip(this);	
 	}
 	
 	//Performs a check on the ID.
@@ -136,7 +131,7 @@ public class Flight {
 	{
 		boolean seatsAvailable = false;
 		
-		for(FlightSection section : sections)
+		for(Section section : sections)
 		{
 			if(section.hasAvailableSeat()) seatsAvailable = true;
 		}
@@ -146,14 +141,14 @@ public class Flight {
 	//Books a seat in the given row and column of the given section
 	public void bookSeat(SeatClass sectionType, int row, char col) throws ManagementException
 	{
-		FlightSection desiredSection = null;
+		Section desiredSection = null;
 		
 		//This for loop looks for the section we are trying to book the seat in
-		for(FlightSection currentFlightSection : sections)
+		for(Section currentSection : sections)
 		{
-			if(currentFlightSection.getType() == sectionType)
+			if(currentSection.getType() == sectionType)
 			{
-				desiredSection = currentFlightSection;
+				desiredSection = currentSection;
 			}
 		}
 		
@@ -178,7 +173,7 @@ public class Flight {
 		return id;
 	}
 	
-	public Airline getAirline()
+	public Line getLine()
 	{
 		return owner;
 	}
@@ -193,18 +188,18 @@ public class Flight {
 		return simpleDateFormat.format(date.getTime());
 	}
 
-	public Airport getOrigin() 
+	public Port getOrigin() 
 	{
 		return origin;
 	}
 
-	public Airport getDestination() 
+	public Port getDestination() 
 	{
 		return destination;
 	}
 	
-	public LinkedList<FlightSection> getFlightSections()
+	public LinkedList<Section> getSections()
 	{
 		return sections;
-	}	
+	}
 }

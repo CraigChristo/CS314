@@ -1,4 +1,4 @@
-package PA1.Models;
+package PA1.Model;
 /* ASSIGNMENT 1
 * File: SeatClass.java
 * Date: 08/28/2012

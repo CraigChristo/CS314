@@ -1,4 +1,5 @@
 package PA1.UI;
+
 public abstract class MenuItem {
 	private String itemString;
 	

@@ -1,12 +1,9 @@
-package PA1.Models;
-/* ASSIGNMENT 1
-* File: FlightSection.java
-* Date: 08/28/2012
-*/
-
+package PA1.Model;
 import java.util.LinkedList;
 
 import PA1.Manager.ManagementException;
+
+
 
 /*
  * The FlightSection class represents a group of seats within a Flight.
@@ -17,18 +14,16 @@ import PA1.Manager.ManagementException;
  * seats (and there's no way to add more or to take them out without 
  * replacing the section).
  */
-
-public class FlightSection {
-	
+public class Section {
 	private static final int MAXROWS = 100;
 	private static final int MINROWS = 1;
 	private static final int MAXCOLUMNS = 10;
 	private static final int MINCOLUMNS = 1;
 	
-	private SeatClass type;
+	private Enum type;//TODO
 	private int rows;
 	private int columns;
-	private Flight flight;
+	private Trip trip;
 	private boolean isEmpty;
 	private Seat[][] seatArray;
 	
@@ -39,10 +34,10 @@ public class FlightSection {
 	 * type (first, business, economy), but only if the previous FlightSection has no booked seats.
 	 * Any violations of the above throws a ManagementException.
 	 */
-	public FlightSection(Flight flightArg,  int rowsArg, int columnsArg, SeatClass typeArg) throws ManagementException
+	public Section(Trip tripArg,  int rowsArg, int columnsArg, Enum typeArg) throws ManagementException//TODO
 	{
 		//Check to see if the flight is null
-		if(flightArg == null)
+		if(tripArg == null)
 		{
 			throw new ManagementException("You are attempting to create a new FlightSection but gave it a null Flight. FlightSections must belong to a flight.");
 		}
@@ -50,17 +45,17 @@ public class FlightSection {
 		if(rowsArg > MAXROWS || rowsArg < MINROWS)
 		{
 			throw new ManagementException("There must be at least " + MINROWS + " row and no more than " + MAXROWS + " rows in a section. You specified " 
-					+ rowsArg + " rows of type " + typeArg + " on " + flightArg.getAirline() + " flight " + flightArg + ".");
+					+ rowsArg + " rows of type " + typeArg + " on " + tripArg.getLine() + " flight " + tripArg + ".");
 		}
 		
 		if(columnsArg > MAXCOLUMNS || columnsArg < MINCOLUMNS)
 		{
 			throw new ManagementException("There must be at least " + MINCOLUMNS + " column and no more than " + MAXCOLUMNS + " columns in a section. You specified " 
-					+ columnsArg + " column sof type " + typeArg + " on " + flightArg.getAirline() + " flight " + flightArg + ".");
+					+ columnsArg + " column sof type " + typeArg + " on " + tripArg.getLine() + " flight " + tripArg + ".");
 		}
 		
 		//Assign variables
-		flight = flightArg;
+		trip= tripArg;
 		type = typeArg;
 		rows = rowsArg;
 		columns = columnsArg;
@@ -68,7 +63,7 @@ public class FlightSection {
 		
 		//Updates the parent Flight's sections.
 		//Throws an error if you attempt to replace a section that already has booked seats.
-		updateFlightSectionList();
+		updateSectionList();
 		
 		//Create array of seats and initialize them all
 		seatArray = new Seat[rows][columns];
@@ -82,12 +77,12 @@ public class FlightSection {
 	}
 	
 	//Checks to see if a section of this type already exists in the parent flight and updates the flight's FlightSections appropriately
-	public void updateFlightSectionList() throws ManagementException
+	public void updateSectionList() throws ManagementException
 	{
 		boolean foundSameTypeSection = false;
-		LinkedList<FlightSection> sectionList = flight.getFlightSections(); //Just a shortcut so we don't have to keep calling the method on the right
+		LinkedList<Section> sectionList = trip.getSections(); //Just a shortcut so we don't have to keep calling the method on the right
 				
-		for(FlightSection currentSection : sectionList)
+		for(Section currentSection : sectionList)
 		{
 			if(currentSection.getType() == this.getType())
 			{
@@ -101,7 +96,7 @@ public class FlightSection {
 				else
 				{ 
 					//It wasn't empty, throw an error.
-					throw new ManagementException("You have attempted to replace " + this.toString() + " on flight " + currentSection.getFlight() 
+					throw new ManagementException("You have attempted to replace " + this.toString() + " on flight " + currentSection.getTrip() 
 							+ ", but at least one seat is already booked in that section.");
 				}
 			}
@@ -154,14 +149,9 @@ public class FlightSection {
 		return SeatClassToString(this.type);
 	}
 	
-	public static String SeatClassToString(SeatClass type)
+	public static String SeatClassToString(Enum type)//TODO
 	{
-		switch(type){
-			case first: return "first class";
-			case business: return "business class";
-			case economy: return "economy class";
-			default: return "unkown class";
-		}
+		return"class unspecified for generic section type";
 	}
 	
 	//Returns a string of the details for every seat
@@ -211,12 +201,12 @@ public class FlightSection {
 		return isEmpty;
 	}
 	
-	public Flight getFlight()
+	public Trip getTrip()
 	{
-		return flight;
+		return trip;
 	}
 	
-	public SeatClass getType()
+	public Enum getType()//TODO
 	{
 		return type;
 	}
@@ -279,11 +269,11 @@ public class FlightSection {
 		private int x; //row - 1
 		private int y; //column - 1
 		boolean booked;
-		FlightSection section;
+		Section section;
 
 		//Constructors require that rows and columns are given as you would see them (one's based),
 		//such as '1A' or '3C'
-		public Seat(FlightSection sectionArg, int rowArg, char colArg) throws ManagementException
+		public Seat(Section sectionArg, int rowArg, char colArg) throws ManagementException
 		{
 			//Turn the column Char into an integer by subtracting A, then adding 1. This
 			//yields the column number. If you don't add 1, you'd have the Y number.
@@ -292,7 +282,7 @@ public class FlightSection {
 		
 		//This constructor lets you give the columns as an integer, but the lowest column
 		//you can give is 1.
-		public Seat(FlightSection sectionArg, int rowArg, int colArg) throws ManagementException
+		public Seat(Section sectionArg, int rowArg, int colArg) throws ManagementException
 		{
 			if(rowArg < 1 || colArg < 1)
 			{
@@ -319,12 +309,12 @@ public class FlightSection {
 			else if(soldArg == true && booked == true)
 			{
 				throw new ManagementException("You have attempted to book seat " + getRow() + getCol() + " in " + getSection() 
-						+ " on " + getSection().getFlight() + ", but this seat has already been booked.");
+						+ " on " + getSection().getTrip() + ", but this seat has already been booked.");
 			}
 			else if(soldArg == false && booked == false)
 			{
 				throw new ManagementException("You have attempted to cancel the booking on seat " + getRow() + getCol() + " in " + getSection() 
-						+ " on " + getSection().getFlight() + ", but this seat is not currently booked.");
+						+ " on " + getSection().getTrip() + ", but this seat is not currently booked.");
 			}
 		}
 		
@@ -365,7 +355,7 @@ public class FlightSection {
 			return booked;
 		}
 
-		public FlightSection getSection() 
+		public Section getSection() 
 		{
 			return section;
 		}	

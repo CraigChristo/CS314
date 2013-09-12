@@ -35,14 +35,14 @@ public class MenuOptions {
 		new MenuItem("Add a new " + Menu.getString("PORT")) {
 			public void run() {
 				String name = Menu.promptString("Enter new " + Menu.getString("PORT") + " name");
-				manager.createAirport(name);
+				manager.createPort(name);
 			}
 		},
 		
 		new MenuItem("Add a new " + Menu.getString("LINE")) {
 			public void run() {
 				String name = Menu.promptString("Enter new " + Menu.getString("LINE") + " name");
-				manager.createAirline(name);
+				manager.createLine(name);
 			}
 		},
 		
@@ -65,14 +65,14 @@ public class MenuOptions {
 			new MenuItem("Add a new " + Menu.getString("PORT")) {
 				public void run() {
 					String name = Menu.promptString("Enter new " + Menu.getString("PORT") + " name");
-					manager.createAirport(name);
+					manager.createPort(name);
 				}
 			},
 			
 			new MenuItem("Add a new " + Menu.getString("LINE")) {
 				public void run() {
 					String name = Menu.promptString("Enter new " + Menu.getString("LINE") + " name");
-					manager.createAirline(name);
+					manager.createLine(name);
 				}
 			},
 			

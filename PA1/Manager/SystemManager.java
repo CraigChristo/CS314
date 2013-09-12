@@ -11,11 +11,11 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import PA1.Models.Airline;
-import PA1.Models.Airport;
-import PA1.Models.Flight;
-import PA1.Models.FlightSection;
-import PA1.Models.SeatClass;
+import PA1.Model.Line;
+import PA1.Model.Port;
+import PA1.Model.SeatClass;
+import PA1.Model.Section;
+import PA1.Model.Trip;
 /* The SystemManager is the controlling mechanism for
  * Airport, Airline, Flight, FlightSection, and Seat.
  * The SystemManager will convert their parameters into a 
@@ -42,56 +42,56 @@ public class SystemManager {
 		}
 	}
 
-	private Hashtable<String, Airport> airportDictionary;
-	private Hashtable<String, Airline> airlineDictionary;
+	private Hashtable<String, Port> portDictionary;
+	private Hashtable<String, Line> lineDictionary;
 
 	public SystemManager()
 	{
-		airportDictionary = new Hashtable<String, Airport>();
-		airlineDictionary = new Hashtable<String, Airline>();
+		portDictionary = new Hashtable<String, Port>();
+		lineDictionary = new Hashtable<String, Line>();
 	}
 
 	//Creates a new Airport. Returns null if there is an error during construction.
-	public Airport createAirport(String idArg)
+	public Port createPort(String idArg)
 	{
-		Airport newAirport;
+		Port newPort;
 
 		try
 		{
-			newAirport = new Airport(idArg);
-			airportDictionary.put(idArg, newAirport);
+			newPort = new Port(idArg);
+			portDictionary.put(idArg, newPort);
 		}
 		catch(ManagementException me)
 		{
 			System.out.println(me);
-			newAirport = null;
+			newPort = null;
 		}
 
-		return newAirport;
+		return newPort;
 	}
 	
 	//Creates a new Airline. Returns null if there is an error during construction.
-	public Airline createAirline(String idArg)
+	public Line createLine(String idArg)
 	{
-		Airline newAirline;
+		Line newLine;
 
 		try
 		{
-			newAirline = new Airline(idArg);
-			airlineDictionary.put(idArg, newAirline);
+			newLine = new Line(idArg);
+			lineDictionary.put(idArg, newLine);
 		}
 		catch(ManagementException me)
 		{
 			System.out.println(me);
-			newAirline = null;
+			newLine = null;
 		}
 
-		return newAirline;
+		return newLine;
 	}
 
 	//Creates a flight given the name of an airline, origin airport, destination airport, date, and flight id.
 	//All parameters are converted to object oriented format before being passed to their respective classes
-	public Flight createFlight(String airlineName, String origAirport, String destAirport, int year, int month, int day, String flightIdArg)
+	public Trip createTrip(String lineName, String origPort, String destPort, int year, int month, int day, String tripIdArg)
 	{
 		//Create a calendar object given the date arguments
 		Calendar date = Calendar.getInstance();
@@ -102,42 +102,42 @@ public class SystemManager {
 		catch(Exception e)
 		{
 			//If a bad date is passed in, like Feb 30th, we want to catch any errors
-			System.out.println("You are attempting to create a flight with ID " + flightIdArg + " on an invalid date, " +year+"/"+month+"/"+day);
+			System.out.println("You are attempting to create a flight with ID " + tripIdArg + " on an invalid date, " +year+"/"+month+"/"+day);
 		}
 
-		Flight newFlight;
+		Trip newTrip;
 
 		try
 		{
 			//Turn airport & airline strings into airport & airline objects
-			Airport origPort = findAirport(origAirport);
-			Airport destPort = findAirport(destAirport);
-			Airline airline = findAirline(airlineName);
+			Port originalPort = findPort(origPort);
+			Port destinationPort = findPort(destPort);
+			Line line = findLine(lineName);
 			
 			//The Flight constructor adds the given flight to the owning airlines flight list
-			newFlight = new Flight(airline, origPort, destPort, date, flightIdArg);
+			newTrip = new Trip(line, originalPort, destinationPort, date, tripIdArg);
 		}
 		catch(Exception e)
 		{
 			//If lookups on airports or airlines return no result, or the flight creation failed, then an error was thrown... return null
 			System.out.println(e);
-			newFlight = null;
+			newTrip = null;
 		}
 
-		return newFlight;
+		return newTrip;
 	}
 
 	//Creates a seating section given the airline name, flight id, number of rows and columns and the class of the seating section
-	public FlightSection createSection(String airlineName, String flightID, int rows, int cols, SeatClass sectionType)
+	public Section createSection(String lineName, String tripID, int rows, int cols, SeatClass sectionType)
 	{
-		FlightSection newSection;
+		Section newSection;
 
 		try
 		{
 			//Lookup airline and flight
-			Airline air = findAirline(airlineName);
-			Flight flight = air.findFlight(flightID);
-			newSection = new FlightSection(flight, rows, cols, sectionType);
+			Line line = findLine(lineName);
+			Trip trip = line.findTrip(tripID);
+			newSection = new Section(trip, rows, cols, sectionType);
 		}
 		catch(Exception e)
 		{
@@ -150,43 +150,43 @@ public class SystemManager {
 	}
 	
 	//Returns a string array of flights that have at least one available seat and are flying from the origin airport to a specific destination
-	public String[] findAvailableFlights(String originAirportName, String destinationAirportName)
+	public String[] findAvailableTrips(String originPortName, String destinationPortName)
 	{
 		//Check to make sure strings are not null before converting them to objects
-		if(originAirportName == null || destinationAirportName == null)
+		if(originPortName == null || destinationPortName == null)
 		{
 			System.out.println("You are attempting to find a flight with either a null origin or null destination, or both."
-					+ "\nOrigin is " + originAirportName + ", destination is " + destinationAirportName + ".");
+					+ "\nOrigin is " + originPortName + ", destination is " + destinationPortName + ".");
 		}
 		
-		String[] flightIds;
+		String[] tripIds;
 		
 		try
 		{
 			//Look up airports
-			Airport originAirportObj = findAirport(originAirportName);
-			Airport destinationAirportObj = findAirport(destinationAirportName);
+			Port originPortObj = findPort(originPortName);
+			Port destinationPortObj = findPort(destinationPortName);
 
 			//Create a linked list of all the flights from all airlines that satisfy the criteria
-			LinkedList<Flight> flightList = new LinkedList<Flight>();
-			LinkedList<Airline> airlineList = hashtableToLinkedList(airlineDictionary);
+			LinkedList<Trip> tripList = new LinkedList<Trip>();
+			LinkedList<Line> lineList = hashtableToLinkedList(lineDictionary);
 			
 			//Look through all airlines and add those that have flights that satisfy criteria
-			for(Airline currentAirline : airlineList)
+			for(Line currentLine : lineList)
 			{
-				LinkedList<Flight> validFlights = currentAirline.findAvailableFlights(originAirportObj, destinationAirportObj);
-				flightList.addAll(validFlights);
+				LinkedList<Trip> validTrips = currentLine.findAvailableTrips(originPortObj, destinationPortObj);
+				tripList.addAll(validTrips);
 			}
 			
 			//Find the length of the linked list of validFlights and create a string array
-			int listLength = flightList.size();
-			 flightIds = new String[listLength];
+			int listLength = tripList.size();
+			 tripIds = new String[listLength];
 
 			//Put the names of all the flights into the string array and then return it
 			int i = 0;
-			for(Flight entry : flightList)
+			for(Trip entry : tripList)
 			{
-				flightIds[i] = entry.toString();
+				tripIds[i] = entry.toString();
 				++i;
 			}
 		}
@@ -194,36 +194,36 @@ public class SystemManager {
 		{
 			//If lookups on the airports failed, then an error was thrown... return null
 			System.out.println(me);
-			flightIds = null;
+			tripIds = null;
 		}
 
-		if(flightIds != null)
+		if(tripIds != null)
 		{
 			//Print all flights that match that given criteria
-			for(String currentFlight : flightIds)
+			for(String currentTrip : tripIds)
 			{
-				System.out.println(currentFlight);
+				System.out.println(currentTrip);
 			}
 		}
 		
-		return flightIds;
+		return tripIds;
 	}
 
 	//Attempt to book a seat on a given airline's flight in the row and column of a given section
-	public boolean bookSeat(String airlineName, String flightID, SeatClass sectionType, int row, char column)
+	public boolean bookSeat(String lineName, String tripID, SeatClass sectionType, int row, char column)
 	{
 		//Check to make sure strings are not null before converting them to objects
-		if(airlineName == null) System.out.println("You are attempting to book a seat, but no airline was specified.");
-		if(flightID == null) System.out.println("You are attempting to book a seat, but no flight was specified.");
+		if(lineName == null) System.out.println("You are attempting to book a seat, but no airline was specified.");
+		if(tripID == null) System.out.println("You are attempting to book a seat, but no flight was specified.");
 
 		boolean bookingSuccess;
 
 		try
 		{
 			//Look up airline and flight
-			Airline airline = findAirline(airlineName);
-			Flight flight = airline.findFlight(flightID);
-			flight.bookSeat(sectionType, row, column);
+			Line line = findLine(lineName);
+			Trip trip = line.findTrip(tripID);
+			trip.bookSeat(sectionType, row, column);
 			bookingSuccess = true;
 		}
 		catch(ManagementException me)
@@ -240,29 +240,29 @@ public class SystemManager {
 	public void displaySystemDetails()
 	{
 		System.out.println("___Airports___");
-		LinkedList<Airport> airportList = hashtableToLinkedList(airportDictionary);
-		for(Airport currentAirport : airportList)
+		LinkedList<Port> portList = hashtableToLinkedList(portDictionary);
+		for(Port currentPort : portList)
 		{
 			//Print all airports
-			System.out.println(currentAirport);
+			System.out.println(currentPort);
 		}
 
 		System.out.println("\n___Airlines___");
-		LinkedList<Airline> airlineList = hashtableToLinkedList(airlineDictionary);
-		for(Airline currentAirline : airlineList)
+		LinkedList<Line> lineList = hashtableToLinkedList(lineDictionary);
+		for(Line currentLine : lineList)
 		{
 			//Print all airlines
-			System.out.println(currentAirline);
+			System.out.println(currentLine);
 			
-			LinkedList<Flight> flightList = hashtableToLinkedList(currentAirline.getFlights());
-			for(Flight currentFlight : flightList)
+			LinkedList<Trip> tripList = hashtableToLinkedList(currentLine.getTrips());
+			for(Trip currentTrip : tripList)
 			{
 				//Print all flights for a given airline
-				System.out.println("\tFlight " + currentFlight.getId() + " from " + currentFlight.getOrigin() + " to " 
-						+ currentFlight.getDestination() + " on " + currentFlight.getDateString());
+				System.out.println("\tFlight " + currentTrip.getId() + " from " + currentTrip.getOrigin() + " to " 
+						+ currentTrip.getDestination() + " on " + currentTrip.getDateString());
 				
-				LinkedList<FlightSection> sectionList = currentFlight.getFlightSections();
-				for(FlightSection currentSection : sectionList)
+				LinkedList<Section> sectionList = currentTrip.getSections();
+				for(Section currentSection : sectionList)
 				{
 					//Print all sections and seats for a given flight
 					System.out.println("\t\t" + currentSection);
@@ -273,35 +273,35 @@ public class SystemManager {
 	}
 
 	//Find an airport object given the string name. Cannot be given null strings.
-	public Airport findAirport(String name) throws ManagementException
+	public Port findPort(String name) throws ManagementException
 	{
 		if(name == null)
 		{
 			throw new NullPointerException("You are attempting to look up an airport, but the airport name is null.");
 		}
 		name = name.toUpperCase();
-		Airport air = airportDictionary.get(name);
-		if(air == null)
+		Port port = portDictionary.get(name);
+		if(port == null)
 		{
 			throw new ManagementException("You have attempted to look up an airport that does not exist. The name you gave was " +name);
 		}
-		return air;
+		return port;
 	}
 
 	//Find an airline object given the string name. Cannot be given null strings.
-	public Airline findAirline(String name) throws ManagementException
+	public Line findLine(String name) throws ManagementException
 	{
 		if(name == null)
 		{
 			throw new NullPointerException("You are attempting to look up an airline, but the airline name is null.");
 		}
 		name = name.toUpperCase();
-		Airline air = airlineDictionary.get(name);
-		if(air == null)
+		Line line = lineDictionary.get(name);
+		if(line == null)
 		{
 			throw new ManagementException("You have attempted to look up an airline that does not exist. The name you gave was " +name);
 		}
-		return air;
+		return line;
 	}
 
 	//Converts hash tables to linked lists for easier iteration. This is static so that other classes can call this method,
