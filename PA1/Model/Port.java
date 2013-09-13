@@ -41,6 +41,10 @@ public class Port {
 			id = idArg;
 		}
 		
+		public String name() {
+			return "Port";
+		}
+		
 		//Performs a check on the ID.
 		private boolean checkId(String nameArg) throws ManagementException
 		{

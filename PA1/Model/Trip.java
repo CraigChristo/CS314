@@ -103,6 +103,10 @@ public class Trip<P extends Port, L extends Line, S extends Section>{
 		owner.addTrip(this);		
 	}
 	
+	public String name() {
+		return "Trip";
+	}
+	
 	//Performs a check on the ID.
 	private boolean checkId(String idArg) throws ManagementException
 	{

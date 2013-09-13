@@ -18,4 +18,8 @@ public class Airport extends Port {
 	{
 			super(idArg);
 	}
+	
+	public String name() {
+		return "Airport";
+	}
 }

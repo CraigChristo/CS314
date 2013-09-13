@@ -12,12 +12,21 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import PA1.Model.*;
+import PA1.UI.MenuOptions.strings;
 /* The SystemManager controls all system operations
  * The SystemManager will convert parameters into a 
  * more Object-Oriented form before passing them onto the
  * other classes.
  */
 public abstract class SystemManager<P extends Port, L extends Line<T,P>, T extends Trip, S extends Section<T>> {
+	
+	public final String[] NOUNS = this.getNouns();
+	
+	public abstract String[] getNouns();
+	
+	public String getString(String in) {
+		return NOUNS[strings.valueOf(in).ordinal()];
+	}
 	
 	public abstract String enumStrings();
 	
@@ -132,7 +141,8 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	//Print out details of all objects
 	public void displaySystemDetails()
 	{
-		System.out.println("___Airports___");
+		
+//		System.out.println("___"+ P.name() +"___");
 		LinkedList<P> portList = hashtableToLinkedList(portDictionary);
 		for(P currentPort : portList)
 		{
@@ -140,7 +150,7 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 			System.out.println(currentPort);
 		}
 
-		System.out.println("\n___Airlines___");
+		System.out.println("\n___"+ L.NAME +"___");
 		LinkedList<L> lineList = hashtableToLinkedList(lineDictionary);
 		for(L currentLine : lineList)
 		{
@@ -151,8 +161,8 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 			for(T currentTrip : tripList)
 			{
 				//Print all flights for a given airline
-				System.out.println("\tFlight " + currentTrip.getId() + " from " + currentTrip.getOrigin() + " to " 
-						+ currentTrip.getDestination() + " on " + currentTrip.getDateString());
+//				System.out.println("\t"+ T.name() + " " + currentTrip.getId() + " from " + currentTrip.getOrigin() + " to " 
+//						+ currentTrip.getDestination() + " on " + currentTrip.getDateString());
 				
 				LinkedList<S> sectionList = currentTrip.getSections();
 				for(S currentSection : sectionList)

@@ -13,4 +13,8 @@ public class Cruise extends Line<CruiseTrip, CruisePort>{
 	{
 		super(idArg);
 	}
+	
+	public String getName() {
+		return "Cruise Line";
+	}
 }

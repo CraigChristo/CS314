@@ -27,4 +27,7 @@ public class Flight extends Trip<Airport,Airline,FlightSection>{
 		super(ownerArg, originArg, destinationArg, dateArg, idArg);
 	}
 
+	public String name() {
+		return "Flight";
+	}
 }

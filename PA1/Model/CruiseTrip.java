@@ -16,4 +16,8 @@ public class CruiseTrip extends Trip<CruisePort,Cruise,CruiseSection> {
 	{
 		super(ownerArg, originArg, destinationArg, dateArg, idArg);
 	}	
+	
+	public static String name() {
+		return "Cruise";
+	}
 }

@@ -18,4 +18,8 @@ public class Airline extends Line<Flight, Airport>{
 	{
 		super(idArg);
 	}	
+	
+	public String getName() {
+		return "Airline";
+	}
 }

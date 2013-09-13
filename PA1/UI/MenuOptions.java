@@ -131,7 +131,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 			}
 		},
 		
-		new MenuItem("Find " + getString("TRIP") + "s by date") {
+		new MenuItem("Find " + getString("TRIP") + "s by Date") {
 			public void run() {
 				findTripByLoc();
 			}
