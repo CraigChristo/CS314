@@ -1,23 +1,31 @@
 package PA1.UI;
 
 import PA1.Manager.SystemManager;
+import PA1.UI.CBSstrings.strings;
 
 public abstract class MenuOptions<T extends SystemManager> {
 	
 	//lol
-	private static final String SECURE_USERNAME = "admin";
-	private static final String SECURE_PASSWORD = "admin123";
+	private static String SECURE_USERNAME = "admin";
+	private static String SECURE_PASSWORD = "admin123";
 
 	public T manager = null;
 	
-	protected MenuOptions() {}
-	
-	protected String getString(String in) {
-		int i = T.classes.valueOf(in).ordinal();
-		return manager.nouns[i];
+	public static enum strings {
+		PORT,TRIP,SECTION,SEAT,LINE;
 	}
 	
-	public final MenuItem[] main = {
+	public final String[] NOUNS = this.getNouns();
+	
+	public abstract String[] getNouns();
+	
+	public String getString(String in) {
+		return NOUNS[strings.valueOf(in).ordinal()];
+	}
+	
+	protected MenuOptions() {}
+	
+	public MenuItem[] main = {
 		
 		new MenuItem("Administration") {
 			public void run() {
@@ -33,7 +41,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		}
 	};
 	
-	public final MenuItem[] admin = {
+	public MenuItem[] admin = {
 			
 		new MenuItem("Manage " + getString("PORT") + "s") {
 			public void run() {
@@ -60,7 +68,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		}	
 	};
 	
-	public final MenuItem[] port = {		
+	public MenuItem[] port = {		
 			
 		new MenuItem("Add a new " + getString("PORT")) {
 			public void run() {
@@ -88,7 +96,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		
 	};
 	
-	public final MenuItem[] trip = {		
+	public MenuItem[] trip = {		
 			
 		new MenuItem("Add a new " + getString("TRIP")) {
 			public void run() {
@@ -116,7 +124,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		
 	};
 	
-	public final MenuItem[] user = {		
+	public MenuItem[] user = {		
 
 		new MenuItem("Find " + getString("TRIP") + "s by " + getString("PORT") + "s") {
 			public void run() {
@@ -140,14 +148,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 			public void run() {
 				Menu.goUp();
 			}
-		},
-		
-		new MenuItem("Display system details") {
-			public void run() {
-				manager.displaySystemDetails();
-			}
-		}
-		
+		}		
 	};
 	
 	private boolean doAuthentication() {

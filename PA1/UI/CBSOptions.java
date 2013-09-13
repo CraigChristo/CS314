@@ -5,12 +5,14 @@ import PA1.Model.CruiseCabinClass;
 
 public class CBSOptions extends MenuOptions<CBSmanager> {
 	
-	public CBSOptions() {
-		manager = new CBSmanager();
+	public String[] getNouns() {
+		String[] arr = { "Port", "Cruise", "Cabin Size", "Cabin", "Cruise Line"};
+		return arr;
 	}
 	
-	public CBSOptions(CBSmanager m) {
-		manager = m;
+	public CBSOptions() {
+		super();
+		manager = new CBSmanager();
 	}
 	
 	protected void portPrompt() {

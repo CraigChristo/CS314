@@ -6,15 +6,6 @@ import java.util.Hashtable;
 import PA1.Model.*;
 
 public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, CruiseSection>{
-
-	public static final String[] BOAT_NOUNS = { "Port", "Cruise", "Section", "Cabin", "Cruise Line" };
-	
-	public CBSmanager()
-	{
-		super(BOAT_NOUNS);
-		portDictionary = new Hashtable<String, CruisePort>();
-		lineDictionary = new Hashtable<String, Cruise>();
-	}
 	
 	public CruisePort createPort(String idArg)
 	{

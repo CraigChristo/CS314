@@ -6,12 +6,14 @@ import PA1.Model.AirSeatClass;
 
 public class ABSOptions extends MenuOptions<ABSmanager> {
 	
-	public ABSOptions() {
-		manager = new ABSmanager();
+	public String[] getNouns() {
+		String[] arr = { "Airport", "Flight", "Class", "Seat", "Airline"};
+		return arr;
 	}
 	
-	public ABSOptions(ABSmanager m) {
-		manager = m;
+	public ABSOptions() {
+		super();
+		manager = new ABSmanager();
 	}
 
 	@Override

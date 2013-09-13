@@ -8,15 +8,6 @@ import PA1.Model.*;
 
 public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSection>{
 
-	private static final String[] AIRPLANE_NOUNS = { "Airport", "Flight", "Flight Section", "Seat", "Airline"};
-	
-	public ABSmanager()
-	{
-		super(AIRPLANE_NOUNS);
-		portDictionary = new Hashtable<String, Airport>();
-		lineDictionary = new Hashtable<String, Airline>();
-	}
-	
 	public Airport createAirport(String idArg)
 	{
 		Airport newPort;

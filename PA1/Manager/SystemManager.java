@@ -19,16 +19,6 @@ import PA1.Model.*;
  */
 public abstract class SystemManager<P extends Port, L extends Line<T,P>, T extends Trip, S extends Section<T>> {
 	
-	public static enum classes {
-		PORT,
-		TRIP,
-		SECTION,
-		SEAT,
-		LINE;
-	}
-	
-	public String[] nouns = {"stuff"};
-	
 	public abstract String enumStrings();
 	
 	protected <ti> String enumStringsFromClass(Class<ti> clazz) {
@@ -41,7 +31,11 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	protected Hashtable<String, P> portDictionary;
 	protected Hashtable<String, L> lineDictionary;
 
-	protected SystemManager(String[] arr) {nouns = arr;}
+	protected SystemManager()
+	{
+		portDictionary = new Hashtable<String, P>();
+		lineDictionary = new Hashtable<String, L>();
+	}
 	
 	public Calendar getDate(int year, int month, int day){
 		Calendar date = Calendar.getInstance();
