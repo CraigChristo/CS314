@@ -23,5 +23,4 @@ public class Airport extends Port {
 	{
 			super(idArg);
 	}
-
 }

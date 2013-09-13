@@ -17,31 +17,29 @@ import PA1.Model.*;
  * more Object-Oriented form before passing them onto the
  * other classes.
  */
-public class SystemManager<P extends Port, L extends Line, T extends Trip, S extends Section> {
+public abstract class SystemManager<P extends Port, L extends Line, T extends Trip, S extends Section> {
 	
-	@SuppressWarnings("rawtypes")
 	public static enum classes {
-		PORT(Airport.class),
-		TRIP(Flight.class),
-		SECTION(FlightSection.class),
-		SEAT(AirSeatClass.class),
-		LINE(Airline.class);	
+		PORT("Port"),
+		TRIP("Trip"),
+		SECTION("Section"),
+		SEAT("Seat"),
+		LINE("Line");
 		
-		private Class c;
-		private classes(Class s) {
-			c = s;
-		}
-		public Class get() {
-			return c;
+		private String s;
+		private classes(String s) {
+			this.s = s;
 		}
 		public String toString() {
-			return c.toString();
+			return s;
 		}
 	}
 	
-	public String enumStrings() {
+	public abstract String enumStrings();
+	
+	protected <ti> String enumStringsFromClass(Class<ti> clazz) {
 		String s = new String();
-		for (Object e : classes.SEAT.get().getEnumConstants()) 
+		for (Object e :  clazz.getEnumConstants())
 			s += e.toString() + ", ";
 		return s;
 	}

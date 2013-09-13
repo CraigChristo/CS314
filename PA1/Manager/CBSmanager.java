@@ -1,7 +1,10 @@
+import java.util.Calendar;
 import java.util.Hashtable;
 
+import PA1.Model.*;
 
-public class cBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, CruiseSection>{
+
+public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, CruiseSection>{
 	
 	private Hashtable<String, CruisePort> portDictionary;
 	private Hashtable<String, Cruise> lineDictionary;
@@ -33,7 +36,7 @@ public class cBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 	
 	public Cruise createLine(String idArg)
 	{
-		Airine newLine;
+		Cruise newLine;
 		idArg = idArg.toUpperCase();
 
 		try
@@ -96,7 +99,10 @@ public class cBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 		return newSection;
 	}
 
+	@Override
+	public String enumStrings() {
+		return enumStringsFromClass(CruiseCabinClass.class);
+	}
+
 	
 }
-
-

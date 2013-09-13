@@ -35,6 +35,5 @@ public class Flight extends Trip{
 	{
 		super(ownerArg, originArg, destinationArg, dateArg, idArg);
 	}
-	
 
 }

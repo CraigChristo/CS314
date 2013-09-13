@@ -6,5 +6,5 @@ package PA1.Model;
 
 //Enumerates possible types of FlightSections.
 public enum AirSeatClass implements Tier{
-	first, business, economy
+	first, business, economy;
 }

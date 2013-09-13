@@ -17,6 +17,5 @@ public class CruiseTrip extends Trip {
 	public CruiseTrip(Cruise ownerArg, CruisePort originArg, CruisePort destinationArg, Calendar dateArg, String idArg) throws ManagementException
 	{
 		super(ownerArg, originArg, destinationArg, dateArg, idArg);
-	}
-	
+	}	
 }

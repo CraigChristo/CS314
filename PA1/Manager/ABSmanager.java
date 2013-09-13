@@ -1,5 +1,7 @@
 import java.util.Hashtable;
 
+import PA1.Model.*;
+
 
 public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSection>{
 	
@@ -96,7 +98,10 @@ public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSe
 		return newSection;
 	}
 
+	@Override
+	public String enumStrings() {
+		return enumStringsFromClass(AirSeatClass.class);
+	}
+
 	
 }
-
-

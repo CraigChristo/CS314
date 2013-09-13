@@ -1,14 +1,32 @@
 package PA1.UI;
 
-import PA1.Tests;
 import PA1.Manager.SystemManager;
-import PA1.Model.AirSeatClass;
 
-public class MenuOptions {
+public abstract class MenuOptions<T extends SystemManager> {
 	
-	private SystemManager manager = null;
+	//lol
+	private static final String SECURE_USERNAME = "admin";
+	private static final String SECURE_PASSWORD = "admin123";
+
+	protected T manager = null;
 	
-	public MenuOptions(SystemManager m) { manager = m; }
+	protected MenuOptions() {}
+	
+	public final MenuItem[] main = {
+		
+		new MenuItem("Administration") {
+			public void run() {
+				if (doAuthentication()) Menu.open(admin);
+				else System.out.println("Not authorized");
+			}
+		},
+		
+		new MenuItem("User") {
+			public void run() {
+				Menu.open(user);
+			}
+		}
+	};
 	
 	public final MenuItem[] admin = {
 			
@@ -24,9 +42,9 @@ public class MenuOptions {
 			}
 		},
 		
-		new MenuItem("Manage Bookings") {
+		new MenuItem("Run tests") {
 			public void run() {
-				Menu.open(booking);
+				runTests();
 			}
 		},
 		
@@ -34,29 +52,20 @@ public class MenuOptions {
 			public void run() {
 				manager.displaySystemDetails();
 			}
-		},
-		
-		new MenuItem("Run tests") {
-			public void run() {
-				(new Tests(manager)).run();
-			}
-		}
-		
+		}	
 	};
 	
 	public final MenuItem[] port = {		
 			
 		new MenuItem("Add a new " + Menu.getString("PORT")) {
 			public void run() {
-				String name = Menu.promptString("Enter new " + Menu.getString("PORT") + " name");
-				manager.createPort(name);
+				portPrompt();
 			}
 		},
 		
 		new MenuItem("Add a new " + Menu.getString("LINE")) {
 			public void run() {
-				String name = Menu.promptString("Enter new " + Menu.getString("LINE") + " name");
-				manager.createLine(name);
+				linePrompt();
 			}
 		},
 		
@@ -78,33 +87,13 @@ public class MenuOptions {
 			
 		new MenuItem("Add a new " + Menu.getString("TRIP")) {
 			public void run() {
-				String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-				String name = Menu.promptString("Enter new " + Menu.getString("TRIP") + " id");
-				String orig = Menu.promptString("Origin");
-				String dest = Menu.promptString("Destination");
-				
-				System.out.println();
-				
-				int day = Menu.promptInt("Day");
-				int month = Menu.promptInt("Month");
-				int year = Menu.promptInt("Year");
-				
-				manager.createTrip(line,orig,dest,year,month,day,name);
+				tripPrompt();
 			}
 		},
 		
 		new MenuItem("Add a new " + Menu.getString("SECTION")) {
 			public void run() {
-				String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-				String name = Menu.promptString("Enter " + Menu.getString("TRIP") + " id");
-				
-				System.out.println();
-				
-				int rows = Menu.promptInt("Enter number of rows");
-				int cols = Menu.promptInt("Enter number of columns");
-				String tier = Menu.promptString("Enter class [" + manager.enumStrings() + "]");
-				
-				manager.createSection(line,name,rows,cols,AirSeatClass.valueOf(tier));
+				sectionPrompt();
 			}
 		},
 		
@@ -122,37 +111,23 @@ public class MenuOptions {
 		
 	};
 	
-	public final MenuItem[] booking = {		
-			
-		//TODO add dates
-		new MenuItem("Find " + Menu.getString("TRIP") + "s") {
+	public final MenuItem[] user = {		
+
+		new MenuItem("Find " + Menu.getString("TRIP") + "s by " + Menu.getString("PORT") + "s") {
 			public void run() {
-				String orig = Menu.promptString("Origin");
-				String dest = Menu.promptString("Destination");
-				
-				System.out.println();
-				
-//					String[] trips = 
-				manager.findAvailableTrips(orig, dest);
-				
-//					if (trips.length > 0)
-//						for (String trip : trips) System.out.println(trip);
-//					else System.out.println("No " + Menu.getString("TRIP") + "s found.");
+				findTripByLoc();
+			}
+		},
+		
+		new MenuItem("Find " + Menu.getString("TRIP") + "s by date") {
+			public void run() {
+				findTripByLoc();
 			}
 		},
 		
 		new MenuItem("Book a " + Menu.getString("SEAT")) {
 			public void run() {
-				String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-				String name = Menu.promptString("Enter " + Menu.getString("TRIP") + " id");
-				
-				System.out.println();
-				
-				String tier = Menu.promptString("Enter class [" + manager.enumStrings() + "]");
-				int row = Menu.promptInt("Enter row");
-				char col = Menu.promptString("Enter column").charAt(0);
-				//TODO SeatClass is hardcoded
-				manager.bookSeat(line,name,AirSeatClass.valueOf(tier),row,col);
+				bookingPrompt();
 			}
 		},
 		
@@ -170,4 +145,53 @@ public class MenuOptions {
 		
 	};
 	
+	private boolean doAuthentication() {
+		String user = Menu.promptString("Username");
+		String pwd = Menu.promptString("Password (plaintext)");
+		
+		if (user == SECURE_USERNAME)
+			if (pwd == SECURE_PASSWORD ) return true;
+			else System.out.println("Incorrect password");
+		else System.out.println("Unknown username");
+		return false;
+	}
+	
+	protected void findTripByLoc() {
+		String orig = Menu.promptString("Origin");
+		String dest = Menu.promptString("Destination");
+		
+		System.out.println();
+		
+		String[] trips = manager.findAvailableTrips(orig, dest);
+		
+		if (trips.length > 0)
+			for (String trip : trips) System.out.println(trip);
+		else System.out.println("No " + Menu.getString("TRIP") + "s found.");
+	}
+	
+	protected void findTripByDate() {
+//		String orig = Menu.promptString("Origin");
+//		String dest = Menu.promptString("Destination");
+//		
+		System.out.println("My dog ate this method");
+		
+//		String[] trips = manager.findAvailableTrips(orig, dest);
+//		boolean tripFound = false;
+//		
+//		if (trips.length > 0)
+//			for (String trip : trips) if (trip.);
+//		if(!tripFound) System.out.println("No " + Menu.getString("TRIP") + "s found.");
+	}
+	
+	protected abstract void portPrompt();
+	
+	protected abstract void linePrompt();
+	
+	protected abstract void tripPrompt();
+	
+	protected abstract void sectionPrompt();
+	
+	protected abstract void bookingPrompt();
+	
+	protected abstract void runTests();
 }

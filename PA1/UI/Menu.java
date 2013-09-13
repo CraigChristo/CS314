@@ -17,7 +17,7 @@ public class Menu {
 	private Menu() {
 	}
 	
-	public static void open(MenuOptions mops) {
+	public static <T extends MenuOptions<?>> void open(T mops) {
 		open(mops.main);
 	}
 	

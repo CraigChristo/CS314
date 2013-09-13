@@ -13,5 +13,4 @@ public class Cruise extends Line<CruiseTrip, CruisePort>{
 	{
 		super(idArg);
 	}
-	
 }

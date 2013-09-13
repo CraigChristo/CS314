@@ -17,6 +17,5 @@ public class Airline extends Line<Flight, Airport>{
 	public Airline(String idArg) throws ManagementException
 	{
 		super(idArg);
-	}
-	
+	}	
 }
