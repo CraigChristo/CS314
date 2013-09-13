@@ -4,12 +4,7 @@ package PA1.Model;
 * Date: 08/28/2012
 */
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import PA1.Manager.ManagementException;
-
-
 
 
 public class Airport extends Port {

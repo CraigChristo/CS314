@@ -4,8 +4,6 @@ import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.Scanner;
 
-import PA1.Manager.SystemManager;
-
 public class Menu {
 	
 	static LinkedList<MenuItem[]> history = new LinkedList<MenuItem[]>();
@@ -88,10 +86,6 @@ public class Menu {
             count++;
         }
         System.out.println("   " + 0 + ": Exit");
-	}
-	
-	public static String getString(String in) {
-		return SystemManager.classes.valueOf(in).toString();
 	}
 	
 	public static void goUp() {

@@ -1,20 +1,23 @@
+package PA1.Manager;
+
+import java.util.Calendar;
 import java.util.Hashtable;
 
 import PA1.Model.*;
 
 
 public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSection>{
-	
-	private Hashtable<String, Airport> portDictionary;
-	private Hashtable<String, Airline> lineDictionary;
 
+	private static final String[] AIRPLANE_NOUNS = { "Airport", "Flight", "Flight Section", "Seat", "Airline"};
+	
 	public ABSmanager()
 	{
+		super(AIRPLANE_NOUNS);
 		portDictionary = new Hashtable<String, Airport>();
 		lineDictionary = new Hashtable<String, Airline>();
 	}
 	
-	public Airport createPort(String idArg)
+	public Airport createAirport(String idArg)
 	{
 		Airport newPort;
 		idArg = idArg.toUpperCase();
@@ -33,9 +36,9 @@ public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSe
 		return newPort;
 	}
 	
-	public Airline createLine(String idArg)
+	public Airline createAirline(String idArg)
 	{
-		Airine newLine;
+		Airline newLine;
 		idArg = idArg.toUpperCase();
 
 		try
@@ -52,7 +55,7 @@ public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSe
 		return newLine;
 	}
 	
-	public Flight createTrip(String lineName, String origPort, String destPort, int year, int month, int day, String tripIdArg){
+	public Flight createFlight(String lineName, String origPort, String destPort, int year, int month, int day, String tripIdArg){
 		Calendar date = getDate(year, month , day);
 		
 		Flight newTrip;
@@ -77,9 +80,9 @@ public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSe
 		return newTrip;
 	}
 	
-	public FlightSection createSection(String lineName, String tripID, int rows, int cols, AirSeatClass sectionType)
+	public FlightSection createFlightSection(String lineName, String tripID, int rows, int cols, AirSeatClass sectionType)
 	{
-		Section newSection;
+		FlightSection newSection;
 
 		try
 		{

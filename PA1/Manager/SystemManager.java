@@ -17,23 +17,17 @@ import PA1.Model.*;
  * more Object-Oriented form before passing them onto the
  * other classes.
  */
-public abstract class SystemManager<P extends Port, L extends Line, T extends Trip, S extends Section> {
+public abstract class SystemManager<P extends Port, L extends Line<T,P>, T extends Trip, S extends Section<T>> {
 	
 	public static enum classes {
-		PORT("Port"),
-		TRIP("Trip"),
-		SECTION("Section"),
-		SEAT("Seat"),
-		LINE("Line");
-		
-		private String s;
-		private classes(String s) {
-			this.s = s;
-		}
-		public String toString() {
-			return s;
-		}
+		PORT,
+		TRIP,
+		SECTION,
+		SEAT,
+		LINE;
 	}
+	
+	public String[] nouns = {"stuff"};
 	
 	public abstract String enumStrings();
 	
@@ -44,54 +38,10 @@ public abstract class SystemManager<P extends Port, L extends Line, T extends Tr
 		return s;
 	}
 
-	private Hashtable<String, P> portDictionary;
-	private Hashtable<String, L> lineDictionary;
+	protected Hashtable<String, P> portDictionary;
+	protected Hashtable<String, L> lineDictionary;
 
-	public SystemManager()
-	{
-		portDictionary = new Hashtable<String, Port>();
-		lineDictionary = new Hashtable<String, Line>();
-	}
-
-	//Creates a new port. Returns null if there is an error during construction.
-	public Port createPort(String idArg)
-	{
-		Port newPort;
-		idArg = idArg.toUpperCase();
-
-		try
-		{
-			newPort = new Port(idArg); 
-			portDictionary.put(idArg, newPort);
-		}
-		catch(ManagementException me)
-		{
-			System.out.println(me);
-			newPort = null;
-		}
-
-		return newPort;
-	}
-	
-	//Creates a new Airline. Returns null if there is an error during construction.
-	public Line createLine(String idArg)
-	{
-		Line newLine;
-		idArg = idArg.toUpperCase();
-
-		try
-		{
-			newLine = new Line(idArg);
-			lineDictionary.put(idArg, newLine);
-		}
-		catch(ManagementException me)
-		{
-			System.out.println(me);
-			newLine = null;
-		}
-
-		return newLine;
-	}
+	protected SystemManager(String[] arr) {nouns = arr;}
 	
 	public Calendar getDate(int year, int month, int day){
 		Calendar date = Calendar.getInstance();
@@ -102,69 +52,9 @@ public abstract class SystemManager<P extends Port, L extends Line, T extends Tr
 		catch(Exception e)
 		{
 			//If a bad date is passed in, like Feb 30th, we want to catch any errors
-			System.out.println("You are attempting to create a flight with ID " + tripIdArg + " on an invalid date, " +year+"/"+month+"/"+day);
+			System.out.println("You are attempting to create a flight on an invalid date, " +year+"/"+month+"/"+day);
 		}
 		return date;
-	}
-
-	//Creates a flight given the name of an airline, origin airport, destination airport, date, and flight id.
-	//All parameters are converted to object oriented format before being passed to their respective classes
-	public Trip createTrip(String lineName, String origPort, String destPort, int year, int month, int day, String tripIdArg)
-	{
-		//Create a calendar object given the date arguments
-		Calendar date = Calendar.getInstance();
-		try
-		{
-			date.set(year, month, day);
-		}
-		catch(Exception e)
-		{
-			//If a bad date is passed in, like Feb 30th, we want to catch any errors
-			System.out.println("You are attempting to create a flight with ID " + tripIdArg + " on an invalid date, " +year+"/"+month+"/"+day);
-		}
-
-		Trip newTrip;
-
-		try
-		{
-			//Turn airport & airline strings into airport & airline objects
-			Port originalPort = findPort(origPort);
-			Port destinationPort = findPort(destPort);
-			Line line = findLine(lineName);
-			
-			newTrip = new Trip(line, originalPort, destinationPort, date, tripIdArg);
-		
-		}
-		catch(Exception e)
-		{
-			//If lookups on airports or airlines return no result, or the flight creation failed, then an error was thrown... return null
-			System.out.println(e);
-			newTrip = null;
-		}
-
-		return newTrip;
-	}
-
-	//Creates a seating section given the airline name, flight id, number of rows and columns and the class of the seating section
-	public Section createSection(String lineName, String tripID, int rows, int cols, AirSeatClass sectionType)
-	{
-		Section newSection;
-
-		try
-		{
-			//Lookup airline and flight
-			Line line = findLine(lineName);
-			Trip trip = line.findTrip(tripID);
-			newSection = new Section(trip, rows, cols, sectionType);
-		}
-		catch(Exception e)
-		{
-			//If lookups on airline or flight return no result, or the section creation failed, then an error was thrown... return null
-			System.out.println(e);
-			newSection = null;
-		}
-
-		return newSection;
 	}
 	
 	//Returns a string array of flights that have at least one available seat and are flying from the origin airport to a specific destination

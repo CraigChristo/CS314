@@ -15,17 +15,17 @@ import PA1.Manager.ManagementException;
  * replacing the section).
  */
 public class Section <T extends Trip>{
-	private static final int MAXROWS = 100;
-	private static final int MINROWS = 1;
-	private static final int MAXCOLUMNS = 10;
-	private static final int MINCOLUMNS = 1;
+	protected static final int MAXROWS = 100;
+	protected static final int MINROWS = 1;
+	protected static final int MAXCOLUMNS = 10;
+	protected static final int MINCOLUMNS = 1;
 	
 	private Tier type;
 	private int rows;
 	private int columns;
-	private Trip trip;
+	private T trip;
 	private boolean isEmpty;
-	private Seat[][] seatArray;
+	private Seat<Section<T>>[][] seatArray;
 	
 	/*Constructor.
 	 * IMPORTANT: When you instantiate a FlightSection, it automatically adds itself to the Flight that you specify.
@@ -34,7 +34,7 @@ public class Section <T extends Trip>{
 	 * type (first, business, economy), but only if the previous FlightSection has no booked seats.
 	 * Any violations of the above throws a ManagementException.
 	 */
-	public Section(Trip tripArg,  int rowsArg, int columnsArg, Tier typeArg) throws ManagementException
+	public Section(T tripArg,  int rowsArg, int columnsArg, Tier typeArg) throws ManagementException
 	{
 		//Check to see if the flight is null
 		if(tripArg == null)
@@ -80,9 +80,9 @@ public class Section <T extends Trip>{
 	public void updateSectionList() throws ManagementException
 	{
 		boolean foundSameTypeSection = false;
-		LinkedList<Section> sectionList = trip.getSections(); //Just a shortcut so we don't have to keep calling the method on the right
+		LinkedList<Section<T>> sectionList = trip.getSections(); //Just a shortcut so we don't have to keep calling the method on the right
 				
-		for(Section currentSection : sectionList)
+		for(Section<T> currentSection : sectionList)
 		{
 			if(currentSection.getType() == this.getType())
 			{
@@ -151,7 +151,7 @@ public class Section <T extends Trip>{
 		return SeatClassToString(this.type);
 	}
 	
-	public static String SeatClassToString(Tier type)//TODO
+	public static String SeatClassToString(Tier type)
 	{
 		try {
 			return type.toString();
@@ -263,7 +263,7 @@ public class Section <T extends Trip>{
 	 * The seat can reference its FlightSection, and through that, can know things about
 	 * what kind of section (first, business, economy) and which Flight it's on.
 	 */
-	protected class Seat <S extends Section>{
+	protected class Seat <S extends Section<T>>{
 		/*
 		The seat class tracks its X and Y position inside the FlightSection grid, which is zero based.
 		Therefore a Seat's actual row is 1 more than its X and its column is 1 more than its Y (columns
@@ -275,11 +275,11 @@ public class Section <T extends Trip>{
 		private int x; //row - 1
 		private int y; //column - 1
 		boolean booked;
-		Section section;
+		S section;
 
 		//Constructors require that rows and columns are given as you would see them (one's based),
 		//such as '1A' or '3C'
-		public Seat(Section sectionArg, int rowArg, char colArg) throws ManagementException
+		public Seat(S sectionArg, int rowArg, char colArg) throws ManagementException
 		{
 			//Turn the column Char into an integer by subtracting A, then adding 1. This
 			//yields the column number. If you don't add 1, you'd have the Y number.
@@ -288,7 +288,7 @@ public class Section <T extends Trip>{
 		
 		//This constructor lets you give the columns as an integer, but the lowest column
 		//you can give is 1.
-		public Seat(Section sectionArg, int rowArg, int colArg) throws ManagementException
+		public Seat(S sectionArg, int rowArg, int colArg) throws ManagementException
 		{
 			if(rowArg < 1 || colArg < 1)
 			{

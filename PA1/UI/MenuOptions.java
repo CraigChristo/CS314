@@ -8,9 +8,14 @@ public abstract class MenuOptions<T extends SystemManager> {
 	private static final String SECURE_USERNAME = "admin";
 	private static final String SECURE_PASSWORD = "admin123";
 
-	protected T manager = null;
+	public T manager = null;
 	
 	protected MenuOptions() {}
+	
+	protected String getString(String in) {
+		int i = T.classes.valueOf(in).ordinal();
+		return manager.nouns[i];
+	}
 	
 	public final MenuItem[] main = {
 		
@@ -30,13 +35,13 @@ public abstract class MenuOptions<T extends SystemManager> {
 	
 	public final MenuItem[] admin = {
 			
-		new MenuItem("Manage " + Menu.getString("PORT") + "s") {
+		new MenuItem("Manage " + getString("PORT") + "s") {
 			public void run() {
 				Menu.open(port);
 			}
 		},
 		
-		new MenuItem("Manage " + Menu.getString("TRIP") + "s") {
+		new MenuItem("Manage " + getString("TRIP") + "s") {
 			public void run() {
 				Menu.open(trip);
 			}
@@ -57,13 +62,13 @@ public abstract class MenuOptions<T extends SystemManager> {
 	
 	public final MenuItem[] port = {		
 			
-		new MenuItem("Add a new " + Menu.getString("PORT")) {
+		new MenuItem("Add a new " + getString("PORT")) {
 			public void run() {
 				portPrompt();
 			}
 		},
 		
-		new MenuItem("Add a new " + Menu.getString("LINE")) {
+		new MenuItem("Add a new " + getString("LINE")) {
 			public void run() {
 				linePrompt();
 			}
@@ -85,13 +90,13 @@ public abstract class MenuOptions<T extends SystemManager> {
 	
 	public final MenuItem[] trip = {		
 			
-		new MenuItem("Add a new " + Menu.getString("TRIP")) {
+		new MenuItem("Add a new " + getString("TRIP")) {
 			public void run() {
 				tripPrompt();
 			}
 		},
 		
-		new MenuItem("Add a new " + Menu.getString("SECTION")) {
+		new MenuItem("Add a new " + getString("SECTION")) {
 			public void run() {
 				sectionPrompt();
 			}
@@ -113,19 +118,19 @@ public abstract class MenuOptions<T extends SystemManager> {
 	
 	public final MenuItem[] user = {		
 
-		new MenuItem("Find " + Menu.getString("TRIP") + "s by " + Menu.getString("PORT") + "s") {
+		new MenuItem("Find " + getString("TRIP") + "s by " + getString("PORT") + "s") {
 			public void run() {
 				findTripByLoc();
 			}
 		},
 		
-		new MenuItem("Find " + Menu.getString("TRIP") + "s by date") {
+		new MenuItem("Find " + getString("TRIP") + "s by date") {
 			public void run() {
 				findTripByLoc();
 			}
 		},
 		
-		new MenuItem("Book a " + Menu.getString("SEAT")) {
+		new MenuItem("Book a " + getString("SEAT")) {
 			public void run() {
 				bookingPrompt();
 			}
@@ -149,8 +154,8 @@ public abstract class MenuOptions<T extends SystemManager> {
 		String user = Menu.promptString("Username");
 		String pwd = Menu.promptString("Password (plaintext)");
 		
-		if (user == SECURE_USERNAME)
-			if (pwd == SECURE_PASSWORD ) return true;
+		if (user.equals(SECURE_USERNAME))
+			if (pwd.equals(SECURE_PASSWORD)) return true;
 			else System.out.println("Incorrect password");
 		else System.out.println("Unknown username");
 		return false;
@@ -166,7 +171,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		
 		if (trips.length > 0)
 			for (String trip : trips) System.out.println(trip);
-		else System.out.println("No " + Menu.getString("TRIP") + "s found.");
+		else System.out.println("No " + getString("TRIP") + "s found.");
 	}
 	
 	protected void findTripByDate() {
@@ -180,7 +185,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 //		
 //		if (trips.length > 0)
 //			for (String trip : trips) if (trip.);
-//		if(!tripFound) System.out.println("No " + Menu.getString("TRIP") + "s found.");
+//		if(!tripFound) System.out.println("No " + getString("TRIP") + "s found.");
 	}
 	
 	protected abstract void portPrompt();

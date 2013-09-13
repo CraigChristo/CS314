@@ -4,8 +4,6 @@ package PA1.Model;
 * Date: 08/28/2012
 */
 
-import java.util.LinkedList;
-
 import PA1.Manager.ManagementException;
 
 
@@ -22,17 +20,12 @@ import PA1.Manager.ManagementException;
 
 public class FlightSection extends Section<Flight>{
 	
-	private static final int MAXROWS = 100;
-	private static final int MINROWS = 1;
-	private static final int MAXCOLUMNS = 10;
-	private static final int MINCOLUMNS = 1;
+	protected static final int MAXROWS = 100;
+	protected static final int MINROWS = 1;
+	protected static final int MAXCOLUMNS = 10;
+	protected static final int MINCOLUMNS = 1;
 	
 	private AirSeatClass type;
-	private int rows;
-	private int columns;
-	private Flight flight;
-	private boolean isEmpty;
-	private Seat[][] seatArray;
 	
 	/*Constructor.
 	 * IMPORTANT: When you instantiate a FlightSection, it automatically adds itself to the Flight that you specify.

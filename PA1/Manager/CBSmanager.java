@@ -1,15 +1,17 @@
+package PA1.Manager;
+
 import java.util.Calendar;
 import java.util.Hashtable;
 
 import PA1.Model.*;
 
 public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, CruiseSection>{
-	
-	private Hashtable<String, CruisePort> portDictionary;
-	private Hashtable<String, Cruise> lineDictionary;
 
+	public static final String[] BOAT_NOUNS = { "Port", "Cruise", "Section", "Cabin", "Cruise Line" };
+	
 	public CBSmanager()
 	{
+		super(BOAT_NOUNS);
 		portDictionary = new Hashtable<String, CruisePort>();
 		lineDictionary = new Hashtable<String, Cruise>();
 	}
@@ -33,7 +35,7 @@ public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 		return newPort;
 	}
 	
-	public Cruise createLine(String idArg)
+	public Cruise createCruiseline(String idArg)
 	{
 		Cruise newLine;
 		idArg = idArg.toUpperCase();
@@ -77,9 +79,9 @@ public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 		return newTrip;
 	}
 	
-	public CruiseSection createSection(String lineName, String tripID, int rows, int cols, AirSeatClass sectionType)
+	public CruiseSection createCruiseSection(String lineName, String tripID, int rows, int cols, CruiseCabinClass sectionType)
 	{
-		Section newSection;
+		CruiseSection newSection;
 
 		try
 		{

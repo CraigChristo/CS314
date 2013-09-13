@@ -1,6 +1,6 @@
 package PA1.UI;
 
-import PA1.Tests;
+import PA1.PlaneTests;
 import PA1.Manager.ABSmanager;
 import PA1.Model.AirSeatClass;
 
@@ -9,23 +9,27 @@ public class ABSOptions extends MenuOptions<ABSmanager> {
 	public ABSOptions() {
 		manager = new ABSmanager();
 	}
+	
+	public ABSOptions(ABSmanager m) {
+		manager = m;
+	}
 
 	@Override
 	protected void portPrompt() {
-		String name = Menu.promptString("Enter new " + Menu.getString("PORT") + " name");
+		String name = Menu.promptString("Enter new " + getString("PORT") + " name");
 		manager.createAirport(name);
 	}
 
 	@Override
 	protected void linePrompt() {
-		String name = Menu.promptString("Enter new " + Menu.getString("LINE") + " name");
-		manager.createLine(name);
+		String name = Menu.promptString("Enter new " + getString("LINE") + " name");
+		manager.createAirline(name);
 	}
 
 	@Override
 	protected void tripPrompt() {
-		String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-		String name = Menu.promptString("Enter new " + Menu.getString("TRIP") + " id");
+		String line = Menu.promptString("Enter " + getString("LINE") + " name");
+		String name = Menu.promptString("Enter new " + getString("TRIP") + " id");
 		String orig = Menu.promptString("Origin");
 		String dest = Menu.promptString("Destination");
 		
@@ -35,13 +39,13 @@ public class ABSOptions extends MenuOptions<ABSmanager> {
 		int month = Menu.promptInt("Month");
 		int year = Menu.promptInt("Year");
 		
-		manager.createTrip(line,orig,dest,year,month,day,name);
+		manager.createFlight(line,orig,dest,year,month,day,name);
 	}
 
 	@Override
 	protected void sectionPrompt() {
-		String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-		String name = Menu.promptString("Enter " + Menu.getString("TRIP") + " id");
+		String line = Menu.promptString("Enter " + getString("LINE") + " name");
+		String name = Menu.promptString("Enter " + getString("TRIP") + " id");
 		
 		System.out.println();
 		
@@ -49,12 +53,12 @@ public class ABSOptions extends MenuOptions<ABSmanager> {
 		int cols = Menu.promptInt("Enter number of columns");
 		String tier = Menu.promptString("Enter class [" + manager.enumStrings() + "]");
 		
-		manager.createSection(line,name,rows,cols,AirSeatClass.valueOf(tier));
+		manager.createFlightSection(line,name,rows,cols,AirSeatClass.valueOf(tier));
 	}
 	
 	protected void bookingPrompt() {
-		String line = Menu.promptString("Enter " + Menu.getString("LINE") + " name");
-		String name = Menu.promptString("Enter " + Menu.getString("TRIP") + " id");
+		String line = Menu.promptString("Enter " + getString("LINE") + " name");
+		String name = Menu.promptString("Enter " + getString("TRIP") + " id");
 		
 		System.out.println();
 		
@@ -66,6 +70,6 @@ public class ABSOptions extends MenuOptions<ABSmanager> {
 	
 	@Override
 	protected void runTests() {
-		(new Tests(manager)).run();
+		(new PlaneTests(manager)).run();
 	}
 }

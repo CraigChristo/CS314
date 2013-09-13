@@ -1,12 +1,10 @@
 package PA1.Model;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.LinkedList;
 
 import PA1.Manager.ManagementException;
 
-public class CruiseTrip extends Trip {
+public class CruiseTrip extends Trip<CruisePort,Cruise,CruiseSection> {
 
 
 	/*Constructs new Flight objects.

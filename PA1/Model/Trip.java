@@ -15,7 +15,7 @@ import PA1.Manager.ManagementException;
  * FlightSections. A Flight also must belong to an airline. 
  */
 
-public class Trip {
+public class Trip<P extends Port, L extends Line, S extends Section>{
 	//Define the maximum and minimum number of ID characters,
 	public final static int MAXIDCHARS = 6;
 	public final static int MINIDCHARS = 3;
@@ -27,18 +27,18 @@ public class Trip {
 	public final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	private String id;
-	private Line owner;
+	private L owner;
 	private Port origin;
 	private Port destination;
 	private Calendar date;
-	private LinkedList<Section> sections;
+	private LinkedList<S> sections;
 	
 	/*Constructs new Flight objects.
 	*There are restrictions on flight ids, which are enforced in the constructor.
 	*The max and min characters are defined statically, and requirements are
 	*handled through a separate checking method, for easy modularity.
 	*/
-	public Trip(Line ownerArg, Port originArg, Port destinationArg, Calendar dateArg, String idArg) throws ManagementException
+	public Trip(L ownerArg, Port originArg, Port destinationArg, Calendar dateArg, String idArg) throws ManagementException
 	{
 		//Check to see if the string is null
 		if(idArg == null)
@@ -96,7 +96,7 @@ public class Trip {
 		origin = originArg;
 		destination = destinationArg;
 		date = dateArg;
-		sections = new LinkedList<Section>();
+		sections = new LinkedList<S>();
 		
 		//Add the flight to the Airline. This will throw an error if the airline already has a flight with this id.
 		//This constructor will throw that error again up to whoever called it.
@@ -138,7 +138,7 @@ public class Trip {
 	}
 	
 	//Books a seat in the given row and column of the given section
-	public void bookSeat(AirSeatClass sectionType, int row, char col) throws ManagementException
+	public void bookSeat(Tier sectionType, int row, char col) throws ManagementException
 	{
 		Section desiredSection = null;
 		
@@ -172,7 +172,7 @@ public class Trip {
 		return id;
 	}
 	
-	public Line getLine()
+	public L getLine()
 	{
 		return owner;
 	}
@@ -197,7 +197,7 @@ public class Trip {
 		return destination;
 	}
 	
-	public LinkedList<Section> getSections()
+	public LinkedList<S> getSections()
 	{
 		return sections;
 	}
