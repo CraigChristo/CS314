@@ -1,7 +1,6 @@
 package PA1.UI;
 
 import PA1.Manager.SystemManager;
-import PA1.UI.CBSstrings.strings;
 
 public abstract class MenuOptions<T extends SystemManager> {
 	
