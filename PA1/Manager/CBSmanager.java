@@ -3,7 +3,6 @@ import java.util.Hashtable;
 
 import PA1.Model.*;
 
-
 public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, CruiseSection>{
 	
 	private Hashtable<String, CruisePort> portDictionary;
@@ -61,9 +60,9 @@ public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 		try
 		{
 			//Turn CruisePort & Cruise strings into CruisePort & Cruise objects
-			Port originalPort = findPort(origPort);
-			Port destinationPort = findPort(destPort);
-			Line line = findLine(lineName);
+			CruisePort originalPort = findPort(origPort);
+			CruisePort destinationPort = findPort(destPort);
+			Cruise line = findLine(lineName);
 			
 			newTrip = new CruiseTrip(line, originalPort, destinationPort, date, tripIdArg);
 		
@@ -85,8 +84,8 @@ public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 		try
 		{
 			//Lookup Cruise and flight
-			Line line = findLine(lineName);
-			Trip trip = line.findTrip(tripID);
+			Cruise line = findLine(lineName);
+			CruiseTrip trip = line.findTrip(tripID);
 			newSection = new CruiseSection(trip, rows, cols, sectionType);
 		}
 		catch(Exception e)

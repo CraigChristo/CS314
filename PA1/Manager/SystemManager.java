@@ -182,8 +182,8 @@ public abstract class SystemManager<P extends Port, L extends Line, T extends Tr
 		try
 		{
 			//Look up airports
-			Port originPortObj = findPort(originPortName);
-			Port destinationPortObj = findPort(destinationPortName);
+			P originPortObj = findPort(originPortName);
+			P destinationPortObj = findPort(destinationPortName);
 
 			//Create a linked list of all the flights from all airlines that satisfy the criteria
 			LinkedList<T> tripList = new LinkedList<T>();
