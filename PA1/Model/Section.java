@@ -14,7 +14,7 @@ import PA1.Manager.ManagementException;
  * seats (and there's no way to add more or to take them out without 
  * replacing the section).
  */
-public class Section {
+public class Section <T extends Trip>{
 	private static final int MAXROWS = 100;
 	private static final int MINROWS = 1;
 	private static final int MAXCOLUMNS = 10;
@@ -207,7 +207,7 @@ public class Section {
 		return isEmpty;
 	}
 	
-	public Trip getTrip()
+	public T getTrip()
 	{
 		return trip;
 	}
@@ -263,7 +263,7 @@ public class Section {
 	 * The seat can reference its FlightSection, and through that, can know things about
 	 * what kind of section (first, business, economy) and which Flight it's on.
 	 */
-	protected class Seat {
+	protected class Seat <S extends Section>{
 		/*
 		The seat class tracks its X and Y position inside the FlightSection grid, which is zero based.
 		Therefore a Seat's actual row is 1 more than its X and its column is 1 more than its Y (columns
@@ -361,7 +361,7 @@ public class Section {
 			return booked;
 		}
 
-		public Section getSection() 
+		public S getSection() 
 		{
 			return section;
 		}	

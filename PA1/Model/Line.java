@@ -8,13 +8,13 @@ import java.util.regex.Pattern;
 import PA1.Manager.ManagementException;
 import PA1.Manager.SystemManager;
 
-public class Line {
+public class Line <T extends Trip, P extends Port> {
 	//Define maximum and minimum number of characters in an id.
 		public final static int MAXIDCHARS = 5;
 		public final static int MINIDCHARS = 1;
 
 		private String id;
-		private Hashtable<String, Trip> myTrips;
+		private Hashtable<String, T> myTrips;
 		
 		/*Constructs new Airline objects.
 		*There are restrictions on airline names, which are enforced in the constructor.
@@ -43,7 +43,7 @@ public class Line {
 
 			//If all of the above went OK, assign values
 			id = idArg;
-			myTrips = new Hashtable<String, Trip>();
+			myTrips = new Hashtable<String, T>();
 		}
 		
 		//Performs a check on the ID.
@@ -71,7 +71,7 @@ public class Line {
 		}
 		
 		//Assign a Trip to this Line. An Line can only have one instance of a given trip ID.
-		public void addTrip(Trip tripArg) throws ManagementException
+		public void addTrip(T tripArg) throws ManagementException
 		{
 			//Check if the flight object is null
 			if(tripArg == null)
@@ -80,7 +80,7 @@ public class Line {
 			}
 			
 			//We just need to check if this airline already has a flight with that number.
-			Trip existingTrip = myTrips.get(tripArg.getId());
+			T existingTrip = myTrips.get(tripArg.getId());
 			if(existingTrip != null)
 			{
 				//Then the flight must already exist if existingFlight is not null
@@ -92,7 +92,7 @@ public class Line {
 		}
 		
 		//Returns a flight object given a flightID string. Returns null if no such flight belongs to this airline.
-		public Trip findTrip(String idArg) throws NullPointerException
+		public T findTrip(String idArg) throws NullPointerException
 		{
 			//Check if the string is null
 			if(idArg == null)
@@ -105,7 +105,7 @@ public class Line {
 		}
 		
 		//Finds a linked list of flights with an open set on a flight from the origin airport to the destination airport
-		public LinkedList<Trip> findAvailableTrips(Port originPort, Port destinationPort) throws ManagementException
+		public LinkedList<T> findAvailableTrips(P originPort, P destinationPort) throws ManagementException
 		{
 			//Check if the airports are null
 			if(originPort == null || destinationPort == null)
@@ -115,10 +115,10 @@ public class Line {
 			}
 				
 			//Create an empty list of acceptable flights and convert the flight hash to linked list for easy iteration
-			LinkedList<Trip> acceptableTripList = new LinkedList<Trip>();
-			LinkedList<Trip> allTripList = SystemManager.hashtableToLinkedList(myTrips);
+			LinkedList<T> acceptableTripList = new LinkedList<T>();
+			LinkedList<T> allTripList = SystemManager.hashtableToLinkedList(myTrips);
 				
-			for(Trip currentTrip : allTripList)
+			for(T currentTrip : allTripList)
 			{
 				//If the current flight matches the given criteria, add it into the list of acceptable flights
 				if(currentTrip.getOrigin() == originPort && currentTrip.getDestination() == destinationPort && currentTrip.hasAvailableSeat())
@@ -135,7 +135,7 @@ public class Line {
 			return id;
 		}
 		
-		public Hashtable<String, Trip> getTrips()
+		public Hashtable<String, T> getTrips()
 		{
 			return myTrips;
 		}

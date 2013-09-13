@@ -6,7 +6,7 @@ import PA1.Manager.ManagementException;
 * Date: 08/28/2012
 */
 
-public class Airline extends Line{
+public class Airline extends Line<Flight, Airport>{
 
 	
 	/*Constructs new Airline objects.

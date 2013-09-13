@@ -20,7 +20,7 @@ import PA1.Manager.ManagementException;
  * replacing the section).
  */
 
-public class FlightSection extends Section{
+public class FlightSection extends Section<Flight>{
 	
 	private static final int MAXROWS = 100;
 	private static final int MINROWS = 1;
@@ -74,7 +74,7 @@ public class FlightSection extends Section{
 	 * The seat can reference its FlightSection, and through that, can know things about
 	 * what kind of section (first, business, economy) and which Flight it's on.
 	 */
-	protected class PlaneSeat extends Seat {
+	protected class PlaneSeat extends Seat<FlightSection> {
 		/*
 		The seat class tracks its X and Y position inside the FlightSection grid, which is zero based.
 		Therefore a Seat's actual row is 1 more than its X and its column is 1 more than its Y (columns

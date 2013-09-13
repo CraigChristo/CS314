@@ -2,7 +2,7 @@ package PA1.Model;
 
 import PA1.Manager.ManagementException;
 
-public class Cruise extends Line{
+public class Cruise extends Line<CruiseTrip, CruisePort>{
 
 	/*Constructs new Airline objects.
 	*There are restrictions on airline names, which are enforced in the constructor.

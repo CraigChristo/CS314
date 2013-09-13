@@ -2,7 +2,7 @@ package PA1.Model;
 
 import PA1.Manager.ManagementException;
 
-public class CruiseSection extends Section{
+public class CruiseSection extends Section<CruiseTrip>{
 	
 	private CruiseCabinClass type;
 	private Cruise trip;
@@ -46,7 +46,7 @@ public class CruiseSection extends Section{
 	 * The seat can reference its FlightSection, and through that, can know things about
 	 * what kind of section (first, business, economy) and which Flight it's on.
 	 */
-	protected class Cabin extends Seat {
+	protected class Cabin extends Seat <CruiseSection>{
 		/*
 		The seat class tracks its X and Y position inside the FlightSection grid, which is zero based.
 		Therefore a Seat's actual row is 1 more than its X and its column is 1 more than its Y (columns
