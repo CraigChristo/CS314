@@ -13,8 +13,4 @@ public class CruisePort extends Port{
 	{
 			super(idArg);
 	}
-	
-	public static String name() {
-		return "Port";
-	}
 }

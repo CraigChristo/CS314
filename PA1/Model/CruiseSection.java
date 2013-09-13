@@ -4,8 +4,6 @@ import PA1.Manager.ManagementException;
 
 public class CruiseSection extends Section<CruiseTrip>{
 	
-	private CruiseCabinClass type;
-	
 	/*Constructor.
 	 * IMPORTANT: When you instantiate a FlightSection, it automatically adds itself to the Flight that you specify.
 	 * As a result, the Flight cannot be null. Also, a FlightSection is attached to the Flight you give it at initialization-time,

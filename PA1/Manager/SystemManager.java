@@ -55,7 +55,7 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 		catch(Exception e)
 		{
 			//If a bad date is passed in, like Feb 30th, we want to catch any errors
-			System.out.println("You are attempting to create a flight on an invalid date, " +year+"/"+month+"/"+day);
+			System.out.println("You are attempting to create a " + getString("TRIP") + " on an invalid date, " +year+"/"+month+"/"+day);
 		}
 		return date;
 	}
@@ -66,7 +66,7 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 		//Check to make sure strings are not null before converting them to objects
 		if(originPortName == null || destinationPortName == null)
 		{
-			System.out.println("You are attempting to find a flight with either a null origin or null destination, or both."
+			System.out.println("You are attempting to find a " + getString("TRIP") + " with either a null origin or null destination, or both."
 					+ "\nOrigin is " + originPortName + ", destination is " + destinationPortName + ".");
 		}
 		
@@ -115,8 +115,8 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	public boolean bookSeat(String lineName, String tripID, Tier sectionType, int row, char column)
 	{
 		//Check to make sure strings are not null before converting them to objects
-		if(lineName == null) System.out.println("You are attempting to book a seat, but no airline was specified.");
-		if(tripID == null) System.out.println("You are attempting to book a seat, but no flight was specified.");
+		if(lineName == null) System.out.println("You are attempting to book a seat, but no " + getString("LINE") + " was specified.");
+		if(tripID == null) System.out.println("You are attempting to book a seat, but no " + getString("TRIP") + " was specified.");
 
 		boolean bookingSuccess;
 
@@ -142,7 +142,7 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	public void displaySystemDetails()
 	{
 		
-//		System.out.println("___"+ P.name() +"___");
+		System.out.println("___"+ getString("PORT") +"___");
 		LinkedList<P> portList = hashtableToLinkedList(portDictionary);
 		for(P currentPort : portList)
 		{
@@ -150,7 +150,7 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 			System.out.println(currentPort);
 		}
 
-		System.out.println("\n___"+ L.NAME +"___");
+		System.out.println("\n___"+ getString("LINE") +"___");
 		LinkedList<L> lineList = hashtableToLinkedList(lineDictionary);
 		for(L currentLine : lineList)
 		{
@@ -161,8 +161,8 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 			for(T currentTrip : tripList)
 			{
 				//Print all flights for a given airline
-//				System.out.println("\t"+ T.name() + " " + currentTrip.getId() + " from " + currentTrip.getOrigin() + " to " 
-//						+ currentTrip.getDestination() + " on " + currentTrip.getDateString());
+				System.out.println("\t"+ getString("TRIP") + " " + currentTrip.getId() + " from " + currentTrip.getOrigin() + " to " 
+						+ currentTrip.getDestination() + " on " + currentTrip.getDateString());
 				
 				LinkedList<S> sectionList = currentTrip.getSections();
 				for(S currentSection : sectionList)
@@ -180,13 +180,13 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	{
 		if(name == null)
 		{
-			throw new NullPointerException("You are attempting to look up an airport, but the airport name is null.");
+			throw new NullPointerException("You are attempting to look up an " + getString("PORT") + ", but the" + getString("PORT") + "name is null.");
 		}
 		name = name.toUpperCase();
 		P port = portDictionary.get(name);
 		if(port == null)
 		{
-			throw new ManagementException("You have attempted to look up an airport that does not exist. The name you gave was " +name);
+			throw new ManagementException("You have attempted to look up an " + getString("PORT") + " that does not exist. The name you gave was " +name);
 		}
 		return port;
 	}
@@ -196,13 +196,13 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 	{
 		if(name == null)
 		{
-			throw new NullPointerException("You are attempting to look up an airline, but the airline name is null.");
+			throw new NullPointerException("You are attempting to look up an " + getString("LINE") + ", but the " + getString("LINE") + " name is null.");
 		}
 		name = name.toUpperCase();
 		L line = lineDictionary.get(name);
 		if(line == null)
 		{
-			throw new ManagementException("You have attempted to look up an airline that does not exist. The name you gave was " +name);
+			throw new ManagementException("You have attempted to look up an " + getString("LINE") + " that does not exist. The name you gave was " +name);
 		}
 		return line;
 	}

@@ -1,7 +1,6 @@
 package PA1.Manager;
 
 import java.util.Calendar;
-import java.util.Hashtable;
 
 import PA1.Model.*;
 
@@ -95,6 +94,9 @@ public class CBSmanager extends SystemManager<CruisePort, Cruise, CruiseTrip, Cr
 	public String enumStrings() {
 		return enumStringsFromClass(CruiseCabinClass.class);
 	}
-
 	
+	public String[] getNouns() {
+		String[] arr = { "Port", "Cruise", "Cabin Section", "Cabin", "Cruise Line"};
+		return arr;
+	}
 }

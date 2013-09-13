@@ -6,7 +6,7 @@ import PA1.Model.CruiseCabinClass;
 public class CBSOptions extends MenuOptions<CBSmanager> {
 	
 	public String[] getNouns() {
-		String[] arr = { "Port", "Cruise", "Cabin Size", "Cabin", "Cruise Line"};
+		String[] arr = { "Port", "Cruise", "Cabin Section", "Cabin", "Cruise Line"};
 		return arr;
 	}
 	

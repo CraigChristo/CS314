@@ -25,8 +25,6 @@ public class FlightSection extends Section<Flight>{
 	protected static final int MAXCOLUMNS = 10;
 	protected static final int MINCOLUMNS = 1;
 	
-	private AirSeatClass type;
-	
 	/*Constructor.
 	 * IMPORTANT: When you instantiate a FlightSection, it automatically adds itself to the Flight that you specify.
 	 * As a result, the Flight cannot be null. Also, a FlightSection is attached to the Flight you give it at initialization-time,

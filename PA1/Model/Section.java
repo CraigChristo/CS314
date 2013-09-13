@@ -20,7 +20,7 @@ public class Section <T extends Trip>{
 	protected static final int MAXCOLUMNS = 10;
 	protected static final int MINCOLUMNS = 1;
 	
-	private Tier type;
+	protected Tier type;
 	private int rows;
 	private int columns;
 	private T trip;

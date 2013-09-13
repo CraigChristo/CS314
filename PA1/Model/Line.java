@@ -46,12 +46,6 @@ public class Line <T extends Trip, P extends Port> {
 			myTrips = new Hashtable<String, T>();
 		}
 		
-		public final static String NAME = this.getName();
-		
-		public String getName() {
-			return "Line";
-		}
-		
 		//Performs a check on the ID.
 		private boolean checkId(String nameArg) throws ManagementException
 		{

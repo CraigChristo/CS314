@@ -97,5 +97,11 @@ public class ABSmanager extends SystemManager<Airport, Airline, Flight, FlightSe
 		return enumStringsFromClass(AirSeatClass.class);
 	}
 
+	@Override
+	public String[] getNouns() {
+		String[] arr = { "Airport", "Flight", "Class", "Seat", "Airline"};
+		return arr;
+	}
+
 	
 }
