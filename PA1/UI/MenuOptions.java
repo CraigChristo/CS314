@@ -64,6 +64,12 @@ public abstract class MenuOptions<T extends SystemManager> {
 			public void run() {
 				manager.displaySystemDetails();
 			}
+		},
+		
+		new MenuItem("Go Back") {
+			public void run() {
+				Menu.goUp();
+			}
 		}	
 	};
 	
@@ -133,7 +139,7 @@ public abstract class MenuOptions<T extends SystemManager> {
 		
 		new MenuItem("Find " + getString("TRIP") + "s by Date") {
 			public void run() {
-				findTripByLoc();
+				findTripByDate();
 			}
 		},
 		
@@ -175,17 +181,20 @@ public abstract class MenuOptions<T extends SystemManager> {
 	}
 	
 	protected void findTripByDate() {
-//		String orig = Menu.promptString("Origin");
-//		String dest = Menu.promptString("Destination");
-//		
-		System.out.println("My dog ate this method");
+		String orig = Menu.promptString("Origin");
+		String dest = Menu.promptString("Destination");
 		
-//		String[] trips = manager.findAvailableTrips(orig, dest);
-//		boolean tripFound = false;
-//		
-//		if (trips.length > 0)
-//			for (String trip : trips) if (trip.);
-//		if(!tripFound) System.out.println("No " + getString("TRIP") + "s found.");
+		System.out.println();
+		
+		int day = Menu.promptInt("Day");
+		int month = Menu.promptInt("Month");
+		int year = Menu.promptInt("Year");
+		
+		String[] trips = manager.findTripsByDate(orig, dest, year, month, day);
+		
+		if (trips.length > 0)
+			for (String trip : trips) System.out.println(trip);
+		else System.out.println("No " + getString("TRIP") + "s found.");
 	}
 	
 	protected abstract void portPrompt();

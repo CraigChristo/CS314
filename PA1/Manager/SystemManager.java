@@ -60,35 +60,47 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 		return date;
 	}
 	
-	//Returns a string array of flights that have at least one available seat and are flying from the origin airport to a specific destination
-	public String[] findAvailableTrips(String originPortName, String destinationPortName)
-	{
+	private LinkedList<T> findTrips(String originPortName, String destinationPortName){
 		//Check to make sure strings are not null before converting them to objects
-		if(originPortName == null || destinationPortName == null)
-		{
-			System.out.println("You are attempting to find a " + getString("TRIP") + " with either a null origin or null destination, or both."
-					+ "\nOrigin is " + originPortName + ", destination is " + destinationPortName + ".");
-		}
-		
-		String[] tripIds;
-		
-		try
-		{
-			//Look up airports
-			P originPortObj = findPort(originPortName);
-			P destinationPortObj = findPort(destinationPortName);
+				if(originPortName == null || destinationPortName == null)
+				{
+					System.out.println("You are attempting to find a flight with either a null origin or null destination, or both."
+							+ "\nOrigin is " + originPortName + ", destination is " + destinationPortName + ".");
+				}
+				
 
-			//Create a linked list of all the flights from all airlines that satisfy the criteria
-			LinkedList<T> tripList = new LinkedList<T>();
-			LinkedList<L> lineList = hashtableToLinkedList(lineDictionary);
-			
-			//Look through all airlines and add those that have flights that satisfy criteria
-			for(L currentLine : lineList)
-			{
-				LinkedList<T> validTrips = currentLine.findAvailableTrips(originPortObj, destinationPortObj);
-				tripList.addAll(validTrips);
-			}
-			
+				LinkedList<T> tripList = null;
+				try
+				{
+					//Look up airports
+					P originPortObj = findPort(originPortName);
+					P destinationPortObj = findPort(destinationPortName);
+
+					//Create a linked list of all the flights from all airlines that satisfy the criteria
+					tripList = new LinkedList<T>();
+					LinkedList<L> lineList = hashtableToLinkedList(lineDictionary);
+					
+					//Look through all airlines and add those that have flights that satisfy criteria
+					for(L currentLine : lineList)
+					{
+						LinkedList<T> validTrips = currentLine.findAvailableTrips(originPortObj, destinationPortObj);
+						tripList.addAll(validTrips);
+					}
+						
+				}		catch(ManagementException me)
+				{
+					//If lookups on the airports failed, then an error was thrown... return null
+					System.out.println(me);
+					tripList = null;
+				}
+				return tripList;
+	}
+	
+	private String [] LLtoStringArr(LinkedList<T> tripList){
+		if (tripList == null)
+			return null;
+		else{
+			String[] tripIds;
 			//Find the length of the linked list of validFlights and create a string array
 			int listLength = tripList.size();
 			 tripIds = new String[listLength];
@@ -100,15 +112,32 @@ public abstract class SystemManager<P extends Port, L extends Line<T,P>, T exten
 				tripIds[i] = entry.toString();
 				++i;
 			}
+			return tripIds;
 		}
-		catch(ManagementException me)
-		{
-			//If lookups on the airports failed, then an error was thrown... return null
-			System.out.println(me);
-			tripIds = null;
-		}
+	}
+	
+	//Returns a string array of flights that have at least one available seat and are flying from the origin airport to a specific destination
+	public String[] findAvailableTrips(String originPortName, String destinationPortName)
+	{
+		LinkedList<T> tripList = findTrips(originPortName, destinationPortName);
+		String[] tripIds = LLtoStringArr(tripList);
 		
 		return tripIds;
+	}
+	
+	public String[] findTripsByDate(String originPortName, String destinationPortName, int year, int month, int day){
+		LinkedList<T> tripList = findTrips(originPortName, destinationPortName);
+		
+		Calendar date = getDate(year,month,day);
+		
+		if (tripList != null){
+			for (T trip : tripList){
+				Calendar tripDate = trip.getDate();
+				if (!(tripDate.get(Calendar.YEAR) == date.get(Calendar.YEAR) && tripDate.get(Calendar.MONTH) == date.get(Calendar.MONTH) && tripDate.get(Calendar.DAY_OF_MONTH) == date.get(Calendar.DAY_OF_MONTH)))
+					tripList.remove(trip);
+			}
+		}
+		return LLtoStringArr(tripList);
 	}
 
 	//Attempt to book a seat on a given airline's flight in the row and column of a given section
