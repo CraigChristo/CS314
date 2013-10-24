@@ -8,7 +8,7 @@
 
 class Song
 {
-        //private data members
+    //private data members
 	private String name;
 	private String artist;
 	private String album;
@@ -20,6 +20,7 @@ class Song
 	private boolean isAvailable;
 	private User owner;
 	
+	//public methods
 	public String getName() {
 		return name;
 	}
@@ -30,5 +31,14 @@ class Song
 	
 	public String getAlbum() {
 		return album;
+	}
+	
+	public User getUser() {
+		return owner;
+	}
+	
+	public boolean isEqual(Song a){
+		if(a.getName().equalsIgnoreCase(name) && owner.isEqual(a.getUser()))return true;
+		else return false;
 	}
 }

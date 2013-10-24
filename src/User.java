@@ -46,6 +46,7 @@ class User
 	//check if a song can be barrowed
 	public boolean checkIfBarrowable(Song a) //TODO
 	{
+		return false;
 
 	}
 	//add invite to list of invites
@@ -60,5 +61,13 @@ class User
 	
 	public Library getLibrary() {
 		return this.mylibrary;
+	}
+	
+	public String getUsername(){
+		return this.username;
+	}
+	public boolean isEqual(User a) {
+		if(username.equalsIgnoreCase(a.getUsername())) return true;
+		else return false;
 	}
 }

@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.sun.tools.javac.util.Pair;
-
 
 class Library implements Iterable<Song>
 {
@@ -22,12 +20,17 @@ class Library implements Iterable<Song>
 	//add song to user library
 	public void addSong(Song a) //TODO
 	{
-		
+		songs.add(a);
 	}
 	//remove a song from the user library
-	public void removeSong(Song b) //TODO
+	public void removeSong(Song b)
 	{
-	
+		
+		for (int i = 0; i < songs.size(); i++){
+			if(songs.get(i).isEqual(b)){
+				songs.remove(i);
+			}
+		}
 	}
 	//create a playlist for the user based on a selection of songs
 	public void createPlaylist(List<Song> a) //TODO
