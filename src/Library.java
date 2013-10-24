@@ -190,7 +190,7 @@ class Library implements Iterable<Song>
 		List<Song> result = new LinkedList<Song>();
 		
 		for (Song s : this.songs) {
-			if (s.getName().equals(query) || s.getArtist().equals(query) || s.getAlbum().equals(query))
+			if (s.getName().contains(query) || s.get("artist").contains(query) || s.get("album").contains(query))
 				result.add(s);
 		}
 		

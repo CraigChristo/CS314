@@ -9,45 +9,57 @@ class Song
 {
     //private data members
 	private String name;
-	private String artist;
-	private String album;
-	private int year;
-	private String composer;
-	private String genre;
+	private Metadata data;
 	
 	//public methods
+	
+	public Song(String name) {
+		this.name = name;
+		data = new Metadata();
+	}
+	
+	public Song(String name, String[][] arr) {
+		this.name = name;
+		data = new Metadata(arr);
+	}
+	
+	public Song(String[][] arr) {
+		data = new Metadata(arr);
+		
+		this.name = data.get("name");
+	}
+	
+	public Song(Metadata m) {
+		this.name = m.get("name");
+		this.data = m;
+	}
+	
+	public String toString() {
+		return this.name +  "\t" + data.toString();
+	}
+	
+	public String get(String key) {
+		if (key.equalsIgnoreCase("name"))
+			return this.name;
+		return this.data.get(key);
+	}
+	
 	public String getName() {
-		return name;
-	}
-	
-	public String getArtist() {
-		return artist;
-	}
-	
-	public String getAlbum() {
-		return album;
+		return this.name;
 	}
 	
 	public int getYear() {
-		return year;
+		return Integer.valueOf(this.data.get("year"));
 	}
 	
-	public String getComposer() {
-		return composer;
-	}
-	
-	public String getGenre() {
-		return genre;
+	public Metadata getMetaData() {
+		return data;
 	}
 	
 	public boolean isEqual(Object a){
 		if (Song.class.isInstance(a)) {
 			Song b = (Song) a;
-			if (
-					b.getName() == this.name &&
-					b.getAlbum() == this.album &&
-					b.getArtist() == this.artist
-				)
+			if (b.getName() == this.name &&	b.getMetaData() == this.data)
 				return true;
 		}
 		return false;
@@ -64,9 +76,9 @@ class Song
 			if (sortBy.equalsIgnoreCase("name"))
 				return s1.getName().compareToIgnoreCase(s2.getName());
 			else if (sortBy.equalsIgnoreCase("artist"))
-				return s1.getArtist().compareToIgnoreCase(s2.getArtist());
+				return s1.get("artist").compareToIgnoreCase(s2.get("artist"));
 			else if (sortBy.equalsIgnoreCase("album"))
-				return s1.getAlbum().compareToIgnoreCase(s2.getAlbum());
+				return s1.get("album").compareToIgnoreCase(s2.get("album"));
 			else
 				return 0;
 		}
