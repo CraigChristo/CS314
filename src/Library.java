@@ -22,7 +22,7 @@ class Library implements Iterable<Song>
 	//add song to user library
 	public void addSong(Song a) //TODO
 	{
-	
+		
 	}
 	//remove a song from the user library
 	public void removeSong(Song b) //TODO
