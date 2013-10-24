@@ -24,15 +24,8 @@ class MusicManager
     
     protected MusicManager() {
     	users = UserManager.instance();
-//    	users = new Hashtable<String, User>();
     	globalLibrary = new Library();
     }
-    
-// I feel like this should be a UserManager method
-//    private boolean areFriends(User a, User b) //TODO
-//    {
-//    	return false;
-//    }
     
 	//public methods
     
@@ -43,13 +36,6 @@ class MusicManager
     	return me;
     }
     
-//   I feel like this should be a UserManager method
-//	//simply add user to users
-//	public void addUser(User a) //TODO
-//	{
-//	
-//	}
-    
 	//returns a dictionary of songs, each with a list of friends who own that song.
 	public Dictionary<Song, List<User>> browseFriendsMusic(User user)
 	{
@@ -57,11 +43,12 @@ class MusicManager
 		
 		for (User friend : user.getFriends()) {
 			for(Song s : friend.getLibrary()) {
-				if (result.get(s) == null) {
+				List<User> userList = result.get(s);
+				if ( userList == null) {
 					List<User> list = new LinkedList<User>();
 					list.add(friend);
 					result.put(s, list);
-				} else result.get(s).add(friend);
+				} else userList.add(friend);
 			}
 		}
 		
@@ -115,7 +102,12 @@ class MusicManager
 	//creates a playlist for a user based on a selection of songs
 	public void createPlaylist(User user, List<Song> songs)
 	{
-		user.getLibrary().createPlaylist(songs);
+		createPlaylist(user, "untitled", songs);
+	}
+	
+	public void createPlaylist(User user, String plname, List<Song> songs)
+	{
+		user.getLibrary().createPlaylist(plname, songs);
 	}
 	
 	//public void addToPlaylist(User user, String name, List<Song> songs)
@@ -133,10 +125,12 @@ class MusicManager
 		return result;
 	}
 	
-	//take back a barrowed song from the users, Song argument is from the user's library
-	public void takeBack(Song a) //TODO
+	//take back a borrowed song from the users, Song argument is from the user's library
+	public void takeBack(User user, Song song)
 	{
-
+		//TODO
+		user.getLibrary().removeSong(song);
+		song.unBorrow();
 	}
 	
 	//add a user library to the global library

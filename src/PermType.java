@@ -1,4 +1,4 @@
 public enum PermType
 {
-    all, friends, none
+    ALL, FRIENDS, NONE
 }

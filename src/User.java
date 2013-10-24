@@ -8,7 +8,7 @@ import java.util.List;
 
 class User
 {
-        //private data members
+    //private data members
 	private String username;
 	private String password;
 	private Library mylibrary;
@@ -43,16 +43,42 @@ class User
 	{
 	
 	}
-	//check if a song can be barrowed
-	public boolean checkIfBarrowable(Song a) //TODO
+	//check if a song can be borrowed
+	public boolean checkIfBorrowable(Song a) //TODO
 	{
+		//Move to library or manager for cohesion
+		//e.g. if (Library.search(a) != null) Library.search(a).isBorrowable()
 		return false;
-
 	}
+	
 	//add invite to list of invites
 	public void addInvite(User a) //TODO
 	{
 
+	}
+	
+	public void setPerm(PermType p) {
+		this.libpermview = p;
+	}
+	
+	public PermType getPerm() {
+		return this.libpermview;
+	}
+	
+	public void setPublic() {
+		setPerm(PermType.ALL);
+	}
+	
+	public void setFriendsOnly() {
+		setPerm(PermType.FRIENDS);
+	}
+	
+	public void setPrivate() {
+		setPerm(PermType.NONE);
+	}
+	
+	public String getName() {
+		return username;
 	}
 	
 	public List<User> getFriends() {
