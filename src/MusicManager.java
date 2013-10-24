@@ -7,6 +7,9 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+
+import com.sun.tools.javac.util.Pair;
 
 class MusicManager 
 {
@@ -16,12 +19,15 @@ class MusicManager
     //private data members
 	private UserManager users;
     private Library globalLibrary;
+    
+    private PriorityQueue<Pair<User, Song>> waitingList;
 
     //private methods
     
     protected MusicManager() {
     	users = UserManager.instance();
     	globalLibrary = new Library();
+    	waitingList = new PriorityQueue<Pair<User,Song>>();
     }
     
 	//public methods
@@ -55,7 +61,7 @@ class MusicManager
 	//search for songs based on a friend, returns a list of songs that the friend owns
 	public List<Song> searchFriendsMusic(User user, User friend)
 	{
-		if (users.areFriends(user, friend))
+		if (user.isFriendsWith(friend))
 			return friend.getLibrary().owned();
 		return null;
 	}
@@ -120,29 +126,33 @@ class MusicManager
 	//get a list of songs from user library based on artist, song, or album (string)
 	public List<Song> getList(User user, String query)
 	{
-		List<Song> result = new LinkedList<Song>();
-		
-		for (Song s : user.getLibrary()) {
-			if (s.getName().equals(query) || s.getArtist().equals(query) || s.getAlbum().equals(query))
-				result.add(s);
-		}
-		
-		return result;
+		return user.getLibrary().search(query);
 	}
 	
-	//take back a borrowed song from the users, Song argument is from the user's library
-	public void takeBack(User user, Song song)
-	{
-		//TODO
-		user.getLibrary().removeSong(song);
-		song.unBorrow();
-	}
 	
 	//add a user library to the global library
 	public void addToLib(Library lib)
 	{
 		for(Song s : lib)
 			globalLibrary.addSong(s);
+	}
+	
+	public void newBorrow(User source, User dest, Song song)
+    {
+    	if (source.getLibrary().contains(song)) {
+    		if (source.getLibrary().checkIfBorrowable(dest, song))
+    			source.sendBarrow(song, dest);
+//    		else
+//    			this.waitingList.add();
+    	}
+    		
+    }
+	
+	//take back a borrowed song from the users, Song argument is from the user's library
+	public void takeBack(User user, Song song)
+	{
+		//TODO
+//		user.getLibrary().unborrowSong(song);
 	}
 }
 

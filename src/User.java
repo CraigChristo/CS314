@@ -3,6 +3,7 @@
  * @purpose: consists of User properties and actions
  */
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -12,49 +13,43 @@ class User
 	private String username;
 	private String password;
 	private Library mylibrary;
-	private List<String> invites;
+	private List<User> invites;
 	private List<User> myfriends;
 	private PermType libpermview;
 	
 	//public methods
+	
+	public User(String name, String password) {
+		this.username = name;
+		this.password = password;
+		
+		this.invites = new LinkedList<User>();
+		this.myfriends = new LinkedList<User>();
+		
+		this.mylibrary = new Library(this);
+	}
 
-	//add song to user library
-	public void addSong(Song a) //TODO
-	{
-	
-	}
-	//remove a song from the user library
-	public void removeSong(Song b) //TODO
-	{
-	
-	}
-	//create a playlist for the user based on a selection of songs
-	public void createPlaylist(List<Song> a) //TODO
-	{
-	
-	}
-	//display the user's library based on the string value(artist, song ,album)
-	public void diplayLib(String a) //TODO
-	{
-	
-	}
 	//accept an invite from the user(string) if invite exist
-	public void acceptInvite(String a) //TODO
+	public void acceptInvite(User friend)
 	{
-	
-	}
-	//check if a song can be borrowed
-	public boolean checkIfBorrowable(Song a) //TODO
-	{
-		//Move to library or manager for cohesion
-		//e.g. if (Library.search(a) != null) Library.search(a).isBorrowable()
-		return false;
+		if (this.invites.contains(friend)) {
+			if (!this.isFriendsWith(friend))
+				this.myfriends.add(friend);
+			
+			this.invites.remove(friend);
+		}
 	}
 	
 	//add invite to list of invites
-	public void addInvite(User a) //TODO
+	public void addInvite(User a) 
 	{
-
+		if (!this.invites.contains(a))
+			this.invites.add(a);
+	}
+	
+	public void sendInvite(User b)
+	{
+		b.addInvite(this);
 	}
 	
 	public void setPerm(PermType p) {
@@ -81,8 +76,23 @@ class User
 		return username;
 	}
 	
+	public boolean checkPassword(String pwd) {
+		return checkPassword(false, pwd);
+	}
+	
+	public boolean checkPassword(Boolean hashed, String hash) {
+		if (hashed) {
+//			if (hash.equals(hash(this.password)))
+				return true;
+		}
+		else 
+			if (hash.equals(this.password))
+				return true;
+		return false;
+	}
+	
 	public List<User> getFriends() {
-		return myfriends;
+		return this.myfriends;
 	}
 	
 	public Library getLibrary() {
@@ -92,8 +102,22 @@ class User
 	public String getUsername(){
 		return this.username;
 	}
-	public boolean isEqual(User a) {
-		if(username.equalsIgnoreCase(a.getUsername())) return true;
-		else return false;
+	
+	public boolean isFriendsWith(User other)
+	{
+		return (this.myfriends.contains(other));
+	}
+	
+	public boolean isEqual(Object o) {
+		if (User.class.isInstance(o)) {
+			if(this.username.equalsIgnoreCase(((User) o).getName())) 
+				return true;
+		}
+		return false;
+	}
+
+	public void sendBarrow(Song song, User dest) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -13,11 +13,7 @@ class Song
 	private String album;
 	private int year;
 	private String composer;
-	private String Genre;
-	private boolean isBarrowable;
-	private boolean permBarrow;
-	private boolean isAvailable;
-	private User owner;
+	private String genre;
 	
 	//public methods
 	public String getName() {
@@ -32,25 +28,29 @@ class Song
 		return album;
 	}
 	
-	public boolean isEqual(Song a){
-		if(a.getName().equalsIgnoreCase(name) && owner.isEqual(a.getOwner()))
-			return true;
-		else 
-			return false;
+	public int getYear() {
+		return year;
 	}
 	
-	public User getOwner() {
-		return owner;
+	public String getComposer() {
+		return composer;
 	}
 	
-	public void Borrow() {
-		this.isBarrowable = false;
-		this.isAvailable = false;
+	public String getGenre() {
+		return genre;
 	}
 	
-	public void unBorrow() {
-		this.isBarrowable = true;
-		this.isAvailable = true;
+	public boolean isEqual(Object a){
+		if (Song.class.isInstance(a)) {
+			Song b = (Song) a;
+			if (
+					b.getName() == this.name &&
+					b.getAlbum() == this.album &&
+					b.getArtist() == this.artist
+				)
+				return true;
+		}
+		return false;
 	}
 	
 	static class SongComparator implements Comparator<Song> {
@@ -76,6 +76,5 @@ class Song
 				return (((SongComparator) o).sortBy.equals(this.sortBy));
 			return false;
 		}
->>>>>>> Stashed changes
 	}
 }

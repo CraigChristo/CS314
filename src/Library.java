@@ -21,6 +21,7 @@ class Library implements Iterable<Song>
     //private data members
 	private List<Song> songs;
 	private Hashtable<String, Library> playlists;
+	private User owner;
 	
 	private Dictionary<String, Dictionary<String, Pair<borrowSetting, Integer>>> friendBorrowLimit;
 	
@@ -28,8 +29,22 @@ class Library implements Iterable<Song>
 	
 	public Library()
 	{
-		this.songs = new ArrayList<Song>();
+		makeLibrary(null, new ArrayList<Song>());
+	}
+	
+	public Library(List<Song> songs2) {
+		makeLibrary(null, songs2);
+	}
+	
+	public Library(User user)
+	{
+		makeLibrary(user, new ArrayList<Song>());
+	}
+	
+	private void makeLibrary(Object owner, List<Song> songs) {
+		this.songs = songs;
 		this.playlists = new Hashtable<String, Library>();
+		this.owner = (User) owner;
 		
 		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<borrowSetting, Integer>>>();
 		
@@ -37,14 +52,9 @@ class Library implements Iterable<Song>
 		setDefaultBorrowLimit(10, borrowSetting.LIMIT);
 	}
 	
-	public Library(List<Song> songs2) {
-		this.songs = songs2;
-		this.playlists = new Hashtable<String, Library>();
-		
-		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<borrowSetting, Integer>>>();
-		
-		//Set default borrow limit to 10 borrows
-		setDefaultBorrowLimit(10, borrowSetting.LIMIT);
+	public User getOwner() 
+	{
+		return this.owner;
 	}
 
 	public void setDefaultBorrowLimit(int limit, borrowSetting setting)
@@ -170,12 +180,28 @@ class Library implements Iterable<Song>
 		this.playlists.put(name, new Library(songs));
 	}
 	
+	public boolean contains(Song song) {
+		return songs.contains(song);
+	}
+	
 	//display the user's library based on the string value(artist, song ,album)
-	public List<Song> toList()
+	public List<Song> search(String query)
 	{
-		return toList("name");
+		List<Song> result = new LinkedList<Song>();
+		
+		for (Song s : this.songs) {
+			if (s.getName().equals(query) || s.getArtist().equals(query) || s.getAlbum().equals(query))
+				result.add(s);
+		}
+		
+		return result;
 	}	
-	public List<Song> toList(String sortBy)
+	
+	public List<Song> toList() {
+		return songs;
+	}
+	
+	public List<Song> toSortedList(String sortBy)
 	{
 		List<Song> result = new LinkedList<Song>(songs);
 		Collections.sort(result,  new Song.SongComparator(sortBy));
@@ -185,6 +211,17 @@ class Library implements Iterable<Song>
 	//Return songs owned by this user
 	public List<Song> owned() {
 		return songs;
+	}
+	
+	//check if a song can be borrowed
+	public boolean checkIfBorrowable(User friend, Song song)
+	{
+		Pair<borrowSetting, Integer> limit = getSongLimit(friend, song);
+		
+		if (limit.fst != borrowSetting.NO && limit.snd > 0)
+			return true;
+		else
+			return false;
 	}
 	
 	//it.getKey() == name
