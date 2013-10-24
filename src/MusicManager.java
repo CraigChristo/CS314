@@ -15,10 +15,7 @@ class MusicManager
 
     //private data members
 	private UserManager users;
-//    private Dictionary<String, User> users;
     private Library globalLibrary;
-    //I don't think we need this, but its in the diagram
-    //private List<Library> userlibraries;
 
     //private methods
     
@@ -110,7 +107,15 @@ class MusicManager
 		user.getLibrary().createPlaylist(plname, songs);
 	}
 	
-	//public void addToPlaylist(User user, String name, List<Song> songs)
+	public void addToPlaylist(User user, String name, List<Song> songs)
+	{
+		Library playlist = user.getLibrary().getPlaylist(name);
+		
+		if (playlist == null)
+			createPlaylist(user, name, songs);
+		else
+			playlist.addSongs(songs);
+	}
 	
 	//get a list of songs from user library based on artist, song, or album (string)
 	public List<Song> getList(User user, String query)

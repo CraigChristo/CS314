@@ -2,10 +2,9 @@
 **Actor**: User  
 
 ###Main flow  
-    1.  User Enters friend name.
-    2. If friend is registered, System sends friend request
+    1. User Enters friend name.
+    2. If friend is registered, System creates friend request
     3. Friend accepts request
-    4. Friendship is created
 
 ###Alt. Flow
     2a. Friend doesn't exist, notify user
@@ -17,15 +16,14 @@
 **Actor**: User  
 
 ###Main flow  
-    1.  User enters Library and Song metadata.
+    1. User enters Library and Song metadata.
     2. If library exists, System gets it
-    3. System searches library for songs and return them
-    4. Show User song results
+    3. If song is in library, system displays it to user
 
 ###Alt. Flow
     2a. Library doesn't exist, notify user
     2b. Library is private and user is not a friend, notify user
-    4a. Song results empty, User receives empty list, notify user
+    3a. Song not in library, notify user
 
 ===========
 
@@ -33,9 +31,8 @@
 **Actor**: User  
 
 ###Main flow  
-    1.  User Enters friend name.
+    1. User Enters friend name.
     2. If friend is registered, System gets friend library
-    3. User receives friend library
 
 ###Alt. Flow
     2a. Friend doesn't exist, notify user
@@ -46,10 +43,10 @@
 **Actor**: User  
 
 ###Main flow  
-    1.  User Enters friend name and song
+    1. User Enters friend name and song
     2. If friend is registered, System gets friend library
     3. If song is in library, System gets song
-    4. User gets song
+    4. If song is borrowable, System transfers song
 
 ###Alt. Flow
     2a. Friend doesn't exist, notify user
@@ -95,7 +92,6 @@
 ###Main flow  
     1. User selects public or friends-only
     2. System sets library state
-    3. Notify user
 
 ###Alt. Flow
     2a. If state is identical, notify user

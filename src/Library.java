@@ -4,6 +4,7 @@
  */
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -12,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.tools.javac.util.Pair;
+
 
 class Library implements Iterable<Song>
 {
@@ -19,7 +22,7 @@ class Library implements Iterable<Song>
 	private List<Song> songs;
 	private Hashtable<String, Library> playlists;
 	
-	private Dictionary<String, Dictionary<String, Pair<Boolean, Integer>>> friendBorrowLimit;
+	private Dictionary<String, Dictionary<String, Pair<borrowSetting, Integer>>> friendBorrowLimit;
 	
 	//public methods
 	
@@ -28,50 +31,60 @@ class Library implements Iterable<Song>
 		this.songs = new ArrayList<Song>();
 		this.playlists = new Hashtable<String, Library>();
 		
-		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<Boolean, Integer>>>();
+		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<borrowSetting, Integer>>>();
 		
 		//Set default borrow limit to 10 borrows
-		setDefaultBorrowLimit(10, false);
+		setDefaultBorrowLimit(10, borrowSetting.LIMIT);
 	}
 	
 	public Library(List<Song> songs2) {
 		this.songs = songs2;
 		this.playlists = new Hashtable<String, Library>();
 		
-		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<Boolean, Integer>>>();
+		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<borrowSetting, Integer>>>();
 		
 		//Set default borrow limit to 10 borrows
-		setDefaultBorrowLimit(10, false);
+		setDefaultBorrowLimit(10, borrowSetting.LIMIT);
 	}
 
-	public void setDefaultBorrowLimit(int limit, boolean timed)
+	public void setDefaultBorrowLimit(int limit, borrowSetting setting)
 	{
-		setBorrowLimit("default", "default", limit, timed);
+		setBorrowLimit("default", "default", limit, setting);
 	}
 	
-	public Pair<Boolean, Integer> getDefaultBorrowLimit()
+	public void setSongDefaultBorrowLimit(Song song, int limit, borrowSetting setting)
+	{
+		setBorrowLimit("default", song.getName(), limit, setting);
+	}
+	
+	public void setFriendDefaultBorrowLimit(User friend, int limit, borrowSetting setting)
+	{
+		setBorrowLimit(friend.getName(), "default", limit, setting);
+	}
+	
+	public Pair<borrowSetting, Integer> getDefaultBorrowLimit()
 	{
 		return getSongLimit("default","default");
 	}
 	
-	public void setBorrowLimit(User friend, Song song, int limit, Boolean timed)
+	public void setBorrowLimit(User friend, Song song, int limit, borrowSetting setting)
 	{
-		setBorrowLimit(friend.getName(), song.getName(), limit, timed);
+		setBorrowLimit(friend.getName(), song.getName(), limit, setting);
 	}
 	
-	public void setBorrowLimit(String friendName, String songName, int limit, Boolean timed) 
+	public void setBorrowLimit(String friendName, String songName, int limit, borrowSetting setting) 
 	{
 		if (getBorrowMap(friendName) == null)
 				createBorrowMap(friendName);
-		getBorrowMap(friendName).put(songName, new Pair<Boolean, Integer>(timed, limit));
+		getBorrowMap(friendName).put(songName, new Pair<borrowSetting, Integer>(setting, limit));
 	}
 	
-	public Dictionary<String, Pair<Boolean, Integer>>  getBorrowMap(User friend)
+	public Dictionary<String, Pair<borrowSetting, Integer>>  getBorrowMap(User friend)
 	{
 		return getBorrowMap(friend.getName());
 	}
 	
-	public Dictionary<String, Pair<Boolean, Integer>> getBorrowMap(String userName)
+	public Dictionary<String, Pair<borrowSetting, Integer>> getBorrowMap(String userName)
 	{
 		if (this.friendBorrowLimit.get(userName) == null)
 			createBorrowMap(userName);
@@ -81,15 +94,32 @@ class Library implements Iterable<Song>
 	
 	private void createBorrowMap(String userName)
 	{
-		this.friendBorrowLimit.put(userName, new Hashtable<String, Pair<Boolean, Integer>>());
+		this.friendBorrowLimit.put(userName, new Hashtable<String, Pair<borrowSetting, Integer>>());
 	}
 	
-	public Pair<Boolean, Integer> getSongLimit(User user, Song song)
+	public Pair<borrowSetting, Integer> getSongLimit(User user, Song song)
 	{
-		return getSongLimit(user.getName(), song.getName());
+		Pair<borrowSetting, Integer> limit = getSongLimit(user.getName(), song.getName());
+		
+		//If not set, get the default for that friend
+		if (limit == null) {
+			limit = getSongLimit(user.getName(), "default");
+			
+			//If that friend doesn't have a default, get the default for the song
+			if (limit == null) {
+				limit = getSongLimit("default", song.getName());
+				
+				//If the song doesn't have a default, get the default for the library
+				if (limit == null) {
+					limit = getDefaultBorrowLimit();
+				}
+			}
+		}
+		
+		return limit;
 	}
 	
-	public Pair<Boolean, Integer> getSongLimit(String userName, String songName)
+	public Pair<borrowSetting, Integer> getSongLimit(String userName, String songName)
 	{
 		if (getBorrowMap(userName).get(songName) == null)
 			createSongLimit(userName, songName);
@@ -98,19 +128,24 @@ class Library implements Iterable<Song>
 	}
 	
 	private void createSongLimit(String userName, String songName) {
-		Pair<Boolean, Integer> defaults = getDefaultBorrowLimit();
-		getBorrowMap(userName).put(songName, new Pair<Boolean, Integer>(defaults.fst, defaults.snd));
+		Pair<borrowSetting, Integer> defaults = getDefaultBorrowLimit();
+		getBorrowMap(userName).put(songName, new Pair<borrowSetting, Integer>(defaults.fst, defaults.snd));
 	}
 
 	//add song to user library
-	public void addSong(Song a) //TODO
+	public void addSong(Song a)
 	{
 		songs.add(a);
 	}
+	
+	public void addSongs(Collection<Song> songs)
+	{
+		this.songs.addAll(songs);
+	}
+	
 	//remove a song from the user library
 	public void removeSong(Song b)
 	{
-		
 		for (int i = 0; i < songs.size(); i++){
 			if(songs.get(i).isEqual(b)){
 				songs.remove(i);
@@ -120,7 +155,7 @@ class Library implements Iterable<Song>
 	
 	public boolean borrowSong(User user, Song song)
 	{
-		Pair<Boolean, Integer> curr = getSongLimit(user, song);
+		Pair<borrowSetting, Integer> curr = getSongLimit(user, song);
 		
 		//If song can be borrowed
 		if (curr.snd > 0)
@@ -162,5 +197,12 @@ class Library implements Iterable<Song>
 	public Iterator<Song> iterator() {
 		return songs.iterator();
 	}
+
+	public Library getPlaylist(String name) {
+		return this.playlists.get(name);
+	}
 	
+	private enum borrowSetting {
+		NO, TIMED, LIMIT, APPROVE_LIMIT, APPROVE_TIMED
+	}
 }
