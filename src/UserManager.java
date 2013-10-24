@@ -3,20 +3,41 @@
  * @purpose: manages user relationships and actions
  */
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
-public UserManager
+
+import com.sun.tools.javac.util.Pair;
+
+class UserManager implements Iterable<User>
 {
+	//Singleton
+	private static UserManager me;
+	
     //private data members
-    private List<User> users;
+    private Hashtable<String, User> users;
     private List<Pair<User, Song> > waitingList;
 
     //private methods
-    private boolean areFriends(User a, User b) //TODO
+    protected UserManager()
     {
-
+    	users = new Hashtable<String, User>();
+    }
+    
+    public boolean areFriends(User a, User b) //TODO
+    {
+    	return false;
     }
 
     //public methods
+    public static UserManager instance()
+    {
+    	if (me == null)
+    		me = new UserManager();
+    	return me;
+    }
+    
     public void addUser(User u) //TODO
     {
 
@@ -87,9 +108,9 @@ public UserManager
 
     }
 
-}
+	@Override
+	public Iterator<User> iterator() {
+		return users.values().iterator();
+	}
 
-public enum PermType
-{
-    all, friends, none
 }

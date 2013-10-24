@@ -3,15 +3,19 @@
  * @purpose: consists of Library properties and actions, including playlist
  */
 
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
+import com.sun.tools.javac.util.Pair;
 
-public Library
+
+class Library implements Iterable<Song>
 {
-        //private data members
+    //private data members
 	private List<Song> songs;
 	private List<Library> playlists;
-	private List<Pair<User,int>> friendBarrowLimit
+	private List<Pair<User,Integer>> friendBarrowLimit;
 	
 	//public methods
 
@@ -31,9 +35,25 @@ public Library
 	
 	}
 	//display the user's library based on the string value(artist, song ,album)
-	public List<String> diplayLib() //TODO
+	public List<Song> toList()
 	{
+		List<Song> result = new LinkedList<Song>(songs);
+		//result.add(borrowed);
+		return result;
+	}
 	
+	//Return songs owned by this user
+	public List<Song> owned() {
+		return songs;
+	}
+	
+	public Iterator<Library> playlist_iter() {
+		return playlists.iterator();
+	}
+	
+	@Override
+	public Iterator<Song> iterator() {
+		return songs.iterator();
 	}
 	
 }

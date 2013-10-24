@@ -3,7 +3,7 @@
  * @purpose: User interface for PA2
  */
 
-public UI
+class UI
 {
     //private data members
     private User currentUser;

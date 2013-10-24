@@ -6,7 +6,7 @@
 
 
 
-public Song
+class Song
 {
         //private data members
 	private String name;
@@ -19,4 +19,16 @@ public Song
 	private boolean permBarrow;
 	private boolean isAvailable;
 	private User owner;
+	
+	public String getName() {
+		return name;
+	}
+	
+	public String getArtist() {
+		return artist;
+	}
+	
+	public String getAlbum() {
+		return album;
+	}
 }

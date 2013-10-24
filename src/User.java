@@ -6,14 +6,14 @@
 import java.util.List;
 
 
-public User
+class User
 {
         //private data members
 	private String username;
 	private String password;
 	private Library mylibrary;
 	private List<String> invites;
-	private List<String> myfriends;
+	private List<User> myfriends;
 	private PermType libpermview;
 	
 	//public methods
@@ -52,5 +52,13 @@ public User
 	public void addInvite(User a) //TODO
 	{
 
+	}
+	
+	public List<User> getFriends() {
+		return myfriends;
+	}
+	
+	public Library getLibrary() {
+		return this.mylibrary;
 	}
 }

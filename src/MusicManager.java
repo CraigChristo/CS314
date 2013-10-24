@@ -3,78 +3,147 @@
  * @purpose: manages music relationships and actions
  */
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.LinkedList;
 import java.util.List;
 
-
-public MusicManager 
+class MusicManager 
 {
+	//Singleton
+	private static MusicManager me;
 
-        //private data members
-        private List <User> users;
-        private Library globalLibrary;
-        private List <Library> userlibraries;
+    //private data members
+	private UserManager users;
+//    private Dictionary<String, User> users;
+    private Library globalLibrary;
+    //I don't think we need this, but its in the diagram
+    //private List<Library> userlibraries;
 
-        //private methods
-        private boolean areFriends(User a, User b) //TODO
-        {
-
-        }
+    //private methods
+    
+    protected MusicManager() {
+    	users = UserManager.instance();
+//    	users = new Hashtable<String, User>();
+    	globalLibrary = new Library();
+    }
+    
+// I feel like this should be a UserManager method
+//    private boolean areFriends(User a, User b) //TODO
+//    {
+//    	return false;
+//    }
+    
 	//public methods
-
-	//simply add user to users
-	public void addUser(User a) //TODO
+    
+    public static MusicManager instance()
+    {
+    	if (me == null)
+    		me = new MusicManager();
+    	return me;
+    }
+    
+//   I feel like this should be a UserManager method
+//	//simply add user to users
+//	public void addUser(User a) //TODO
+//	{
+//	
+//	}
+    
+	//returns a dictionary of songs, each with a list of friends who own that song.
+	public Dictionary<Song, List<User>> browseFriendsMusic(User user)
 	{
-	
+		Hashtable<Song, List<User>> result = new Hashtable<Song, List<User>>();
+		
+		for (User friend : user.getFriends()) {
+			for(Song s : friend.getLibrary()) {
+				if (result.get(s) == null) {
+					List<User> list = new LinkedList<User>();
+					list.add(friend);
+					result.put(s, list);
+				} else result.get(s).add(friend);
+			}
+		}
+		
+		return result;
 	}
-	//print out all songs in some order from all friends of current user, implementation depends on UI
-	public void browseFriendsMusic() //TODO
-	{
 	
-	}
 	//search for songs based on a friend, returns a list of songs that the friend owns
-	public List<Song> searchFriendsMusic(User a) //TODO
+	public List<Song> searchFriendsMusic(User user, User friend)
 	{
-	
+		if (users.areFriends(user, friend))
+			return friend.getLibrary().owned();
+		return null;
 	}
+	
 	//search for friends based on a song, returns a list of friends
-	public List<User> searchFriendsMusic(Song a) //TODO
+	public List<User> searchFriendsMusic(User user, Song song)
 	{
-	
+		return searchForUsersBySong(user.getFriends(), song);
 	}
+	
 	//search for users friend or not based on a song, returns a list of Users
-	public List<User> searchMusic(Song a) //TODO
+	public List<User> searchMusic(Song song)
 	{
-	
+		return searchForUsersBySong(users, song);
 	}
+	
+	private List<User> searchForUsersBySong(Iterable<User> coll, Song song)
+	{
+		List<User> result = new LinkedList<User>();
+		
+		for (User u : coll) {
+			if (u.getLibrary().toList().contains(song))
+				result.add(u);
+		}
+		
+		return result;
+	}
+	
 	//add a song to a user's library
-	public void addSong(Song a, User b) //TODO
+	public void addSong(User user, Song song)
 	{
-	
+		user.getLibrary().addSong(song);
 	}
+	
 	//remove a song from a user's library
-	public void removeSong(Song a, User b) //TODO
+	public void removeSong(User user, Song song)
 	{
+		user.getLibrary().removeSong(song);
+	}
 	
-	}
 	//creates a playlist for a user based on a selection of songs
-	public void createPlaylist(List<Song> a, User b) //TODO
+	public void createPlaylist(User user, List<Song> songs)
 	{
-
+		user.getLibrary().createPlaylist(songs);
 	}
-	//display the library based on artist, song, or album (string) and the user, depends on UI to impliment
-	public void displayLib(String a, User b) //TODO
+	
+	//public void addToPlaylist(User user, String name, List<Song> songs)
+	
+	//get a list of songs from user library based on artist, song, or album (string)
+	public List<Song> getList(User user, String query)
 	{
-
+		List<Song> result = new LinkedList<Song>();
+		
+		for (Song s : user.getLibrary()) {
+			if (s.getName().equals(query) || s.getArtist().equals(query) || s.getAlbum().equals(query))
+				result.add(s);
+		}
+		
+		return result;
 	}
+	
 	//take back a barrowed song from the users, Song argument is from the user's library
 	public void takeBack(Song a) //TODO
 	{
 
 	}
-	//add a user library to the list
-	public void addToLib(Library a) //TODO
+	
+	//add a user library to the global library
+	public void addToLib(Library lib)
 	{
-
+		for(Song s : lib)
+			globalLibrary.addSong(s);
 	}
 }
 
