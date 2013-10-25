@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.Map;
+
 /*
  * @file: UI.java
  * @purpose: User interface for PA2
@@ -66,8 +69,10 @@ class UI
     	//Add some songs to everyone's libraries
     	bart.mMngr.addSong(bart.getUser(), new Song(songMeta));
     	bart.mMngr.addSong(bart.getUser(), new Song(songMeta2));
+    	bart.mMngr.addSong(bart.getUser(), new Song(songMeta5));
     	bart.mMngr.addSong(bart.uMngr.findUser("Bob"), new Song(songMeta3));
     	bart.mMngr.addSong(bart.uMngr.findUser("Bob"), new Song(songMeta4));
+    	bart.mMngr.addSong(bart.uMngr.findUser("Bob"), new Song(songMeta5));
     	bart.mMngr.addSong(bart.uMngr.findUser("Alice"), new Song(songMeta5));
     	
     	//Add some friends
@@ -96,8 +101,12 @@ class UI
     	//Search current user's friends libraries
     	System.out.println("\nSearching for Stair in friends: \n");
     	
-    	for (Song song : bart.mMngr.searchFriendsMusic(bart.getUser(), "stair"))
-    		System.out.println(song);
+    	for (Map.Entry<Song, List<User>> entry : bart.mMngr.searchFriendsMusic(bart.getUser(), "stair")) {
+    		System.out.println(entry.getKey());
+    		System.out.println("Owned by: ");
+    		for (User u : entry.getValue())
+    			System.out.println(u.getName());
+    	}
     }
     
     public UI()

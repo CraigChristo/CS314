@@ -4,6 +4,9 @@
  */
 
 import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 class Song
 {
@@ -13,11 +16,12 @@ class Song
 	
 	//public methods
 
-	public Song(String name) {
+	public Song(String name, String artist) {
 		this.name = name;
 		
 		data = new Metadata();
 		data.put("name", name);
+		data.put("artist", artist);
 	}
 	
 	public Song(String name, String[][] arr) {

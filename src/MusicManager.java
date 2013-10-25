@@ -7,7 +7,9 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 
 class MusicManager 
@@ -43,14 +45,9 @@ class MusicManager
 	{
 		Hashtable<Song, List<User>> result = new Hashtable<Song, List<User>>();
 		
-		for (User friend : user.getFriends()) {
-			for(Song s : friend.getLibrary()) {
-				List<User> userList = result.get(s);
-				if ( userList == null) {
-					List<User> list = new LinkedList<User>();
-					list.add(friend);
-					result.put(s, list);
-				} else userList.add(friend);
+		for (User f : user.getFriends()) {
+			for(Song s : f.getLibrary()) {
+				updateUserList(result, f, s);
 			}
 		}
 		
@@ -65,14 +62,26 @@ class MusicManager
 		return null;
 	}
 	
-	public List<Song> searchFriendsMusic(User user, String query)
+	public Set<Map.Entry<Song, List<User>>> searchFriendsMusic(User user, String query)
 	{
-		List<Song> result = new LinkedList<Song>();
+		Hashtable<Song, List<User>> result = new Hashtable<Song, List<User>>();
 		
-		for (User u : user.getFriends())
-			result.addAll(u.getLibrary().search(query));
+		for (User f : user.getFriends())
+			for (Song s : f.getLibrary().search(query))
+				updateUserList(result, f, s);
 		
-		return result;
+		return result.entrySet();
+	}
+	
+	private List<User> updateUserList(Dictionary<Song, List<User>> r, User f, Song s) {
+		List<User> userList = r.get(s);
+		if ( userList == null) {
+			userList = new LinkedList<User>();
+			userList.add(f);
+			r.put(s, userList);
+		} else userList.add(f);
+		
+		return userList;
 	}
 	
 	//search for friends based on a song, returns a list of friends
