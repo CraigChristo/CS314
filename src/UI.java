@@ -79,10 +79,7 @@ class UI
     	
     	
     	//Print logged-in user library
-    	System.out.println(bart.getUser().getName() + "'s Library \n----------------------------------------");
-    	
-    	for (Song s : bart.getUser().getLibrary())
-    		System.out.println(s);
+    	bart.printLibrary();
     	
     	//Search current user library
     	System.out.println("\nSearching for Funk: \n");
@@ -90,13 +87,10 @@ class UI
     		System.out.println(song);
     	
     	//Print friends libraries
-    	System.out.println("\nFriend's Libraries \n -------------------------------------");
+    	System.out.println("\nFriend's Libraries \n-------------------------------------\n");
     	
     	for (User f : bart.getUser().getFriends()) {
-    		System.out.println(f.getName());
-    		
-    		for (Song s : f.getLibrary())
-        		System.out.println("\t" + s);
+    		bart.printLibrary(f);
     	}
     	
     	//Search current user's friends libraries
@@ -118,6 +112,19 @@ class UI
     private void parseFile(String file) //TODO
     {
     	
+    }
+    
+    public void printLibrary() {
+    	printLibrary(this.currentUser);
+    }
+    
+    public void printLibrary(User u) {
+    	System.out.println(u.getName() + "'s Library \n----------------------------------------");
+    	
+    	for (Song s : u.getLibrary())
+    		System.out.println(s);
+    	
+    	System.out.println();
     }
     
     public User getUser() {
