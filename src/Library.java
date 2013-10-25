@@ -145,7 +145,8 @@ class Library implements Iterable<Song>
 	//add song to user library
 	public void addSong(Song a)
 	{
-		songs.add(a);
+		if (!this.contains(a))
+			songs.add(a);
 	}
 	
 	public void addSongs(Collection<Song> songs)
