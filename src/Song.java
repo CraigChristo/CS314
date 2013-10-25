@@ -16,7 +16,6 @@ class Song
 	
 	//public methods
 	
-	public Song(String name, String artist) {
 
 	public Song(String name, String artist) {
 		this.name = name;

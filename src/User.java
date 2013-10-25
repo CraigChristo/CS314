@@ -109,7 +109,7 @@ class User
     {
         if(!isFriendsWith(friend))
         {
-            myFriends.add(friend);
+            myfriends.add(friend);
         }
     }
 	
@@ -126,7 +126,7 @@ class User
 		return false;
 	}
 
-	public void sendBorrow(Song song, User dest) {
+	public void sendBarrow(Song song, User dest) {
 		// TODO Auto-generated method stub
 		
 	}

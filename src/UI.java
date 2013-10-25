@@ -174,7 +174,8 @@ class UI
                     
                     //create song
                     Song s = new Song(m);
-                    u.getLibrary().addsong(s);
+                    mMngr.getGlobalLibrary().addSong(s);
+                    u.getLibrary().addSong(s);
                 
                 }
 
@@ -185,7 +186,9 @@ class UI
                 String[] friends = friendsFull.split(",");
                 for(int i = 0; i < friends.length; ++i)
                 {
-                    u.addFriend(friends[i]);
+                    User friend = uMngr.findUser(friends[i]);
+                    if(friend != null)
+                        u.addFriend(friend);
                 }
                 
             }

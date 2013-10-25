@@ -39,6 +39,10 @@ class MusicManager
     		me = new MusicManager();
     	return me;
     }
+
+    public Library getGlobalLibrary() {
+        return globalLibrary;
+    }
     
 	//returns a dictionary of songs, each with a list of friends who own that song.
 	public Dictionary<Song, List<User>> browseFriendsMusic(User user)
