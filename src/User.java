@@ -102,6 +102,14 @@ class User
 	public String getUsername(){
 		return this.username;
 	}
+
+    public void addFriend(User friend)
+    {
+        if(!isFriendsWith(friend))
+        {
+            myFriends.add(friend);
+        }
+    }
 	
 	public boolean isFriendsWith(User other)
 	{
@@ -116,7 +124,7 @@ class User
 		return false;
 	}
 
-	public void sendBarrow(Song song, User dest) {
+	public void sendBorrow(Song song, User dest) {
 		// TODO Auto-generated method stub
 		
 	}

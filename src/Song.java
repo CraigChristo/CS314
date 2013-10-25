@@ -13,9 +13,10 @@ class Song
 	
 	//public methods
 	
-	public Song(String name) {
+	public Song(String name, String artist) {
 		this.name = name;
 		data = new Metadata();
+        data.put("artist", artist);
 	}
 	
 	public Song(String name, String[][] arr) {

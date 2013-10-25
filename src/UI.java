@@ -3,6 +3,9 @@
  * @purpose: User interface for PA2
  */
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+
 class UI
 {
 	private static String[][] songMeta = {
@@ -63,7 +66,76 @@ class UI
     //parses input file to create users on songs
     private void parseFile(String file) //TODO
     {
-    	
+        try
+        {
+            BufferedReader reader = new BufferedReader(new FileReader("testfile"));
+            String line = null;
+            while((line = reader.readLine()) != null)
+            {
+                //remove white space
+                line = line.replaceAll("\t", "");
+                line = line.replaceAll(" ", "");
+                
+                if(line.isEmpty()) //break if line is empty
+                    break;
+
+                //username
+                int lowerBound = 0;
+                int upperBound = line.indexOf(',');
+                String user = line.substring(lowerBound, upperBound);
+                //System.out.println(user);
+
+                //password
+                lowerBound = ++upperBound;
+                upperBound = line.indexOf('[', lowerBound);
+                String pw = line.substring(lowerBound, upperBound);
+                //System.out.println(pw);
+
+                //create user
+                User u = new User(user, pw);
+
+                //song metadata
+                lowerBound = ++upperBound;
+                upperBound = line.indexOf(']', lowerBound);
+                String songsFull = line.substring(lowerBound, upperBound);
+                String[] songs = songsFull.split("\\|");
+                for(int i = 0; i < songs.length; ++i)
+                {
+                    String[] data = songs[i].split(",");
+                    Metadata m = new Metadata();
+
+                    //create metadata
+                    if(!data[0].isEmpty() || !data[1].isEmpty())
+                    {
+                        m.put("name", data[0]);
+                        m.put("artist", data[1]);
+                        m.put("album", data[2]);
+                        m.put("year", data[3]);
+                        m.put("composer", data[4]);
+                        m.put("genre", data[5]);
+                    }
+                    
+                    //create song
+                    Song s = new Song(m);
+                    u.getLibrary().addsong(s);
+                
+                }
+
+                //friends
+                lowerBound = upperBound + 2;
+                upperBound = line.indexOf(')', lowerBound);
+                String friendsFull = line.substring(lowerBound, upperBound);
+                String[] friends = friendsFull.split(",");
+                for(int i = 0; i < friends.length; ++i)
+                {
+                    u.addFriend(friends[i]);
+                }
+                
+            }
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
     
     public User getUser() {
