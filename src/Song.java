@@ -12,7 +12,7 @@ class Song
 	private Metadata data;
 	
 	//public methods
-	
+
 	public Song(String name) {
 		this.name = name;
 		data = new Metadata();
@@ -23,6 +23,7 @@ class Song
 		data = new Metadata(arr);
 	}
 	
+	//TODO: Throw an error when there is no name;
 	public Song(String[][] arr) {
 		data = new Metadata(arr);
 		

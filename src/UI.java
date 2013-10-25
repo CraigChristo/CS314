@@ -15,6 +15,23 @@ class UI
 		{"genre", "Gypsy Metalcore"}
 	});
 	
+	private static String[][] songMeta3 = {
+		{"name", "Cheese Strings"},
+		{"artist", "Bon Anchovi"},
+		{"album", "Pepper my roni"}
+	};
+	
+	private static String[][] songMeta4 = {
+		{"name", "Stairway to Heaven"},
+		{"genre", "Bible"}
+	};
+	
+	private static String[][] songMeta5 = {
+		{"name", "Stairs go up"},
+		{"album", "And Sometimes down"},
+		{"artist", "Also has stairs"}
+	};
+	
     //private data members
     private User currentUser;
     
@@ -26,10 +43,12 @@ class UI
     {
     	UI bart = new UI();
     	
+    	//Create users
     	bart.uMngr.addUser(new User("Bob", "pringles"));
     	bart.uMngr.addUser(new User("Alice", "unicrons"));
     	bart.uMngr.addUser(new User("UltralordSupreme", "galactic_conquest"));
     	
+    	//Test login
     	System.out.println("Logging in as: -u Bart -p squids");
     	System.out.println(bart.doLogin("Bob", "squids"));
     	
@@ -40,16 +59,51 @@ class UI
     	
     	System.out.println("\nLogged In? " + bart.loggedIn() + "\n");
     	
+    	//Other users
+    	User Bob = bart.uMngr.findUser("Bob");
+    	User Alice = bart.uMngr.findUser("Alice");
+    	
+    	//Add some songs to everyone's libraries
     	bart.mMngr.addSong(bart.getUser(), new Song(songMeta));
     	bart.mMngr.addSong(bart.getUser(), new Song(songMeta2));
+    	bart.mMngr.addSong(bart.uMngr.findUser("Bob"), new Song(songMeta3));
+    	bart.mMngr.addSong(bart.uMngr.findUser("Bob"), new Song(songMeta4));
+    	bart.mMngr.addSong(bart.uMngr.findUser("Alice"), new Song(songMeta5));
     	
+    	//Add some friends
+    	bart.getUser().sendInvite(Bob);
+    	Bob.acceptInvite(bart.getUser());
+    	
+    	Alice.sendInvite(bart.getUser());
+    	bart.getUser().acceptInvite(Alice);
+    	
+    	
+    	//Print logged-in user library
     	System.out.println(bart.getUser().getName() + "'s Library \n----------------------------------------");
     	
     	for (Song s : bart.getUser().getLibrary())
-    		System.out.println(s + "\n");
+    		System.out.println(s);
     	
-    	System.out.println("Searching for Funk: \n" + bart.getUser().getLibrary().search("Funk"));
+    	//Search current user library
+    	System.out.println("\nSearching for Funk: \n");
+    	for (Song song : bart.getUser().getLibrary().search("Funk"))
+    		System.out.println(song);
     	
+    	//Print friends libraries
+    	System.out.println("\nFriend's Libraries \n -------------------------------------");
+    	
+    	for (User f : bart.getUser().getFriends()) {
+    		System.out.println(f.getName());
+    		
+    		for (Song s : f.getLibrary())
+        		System.out.println("\t" + s);
+    	}
+    	
+    	//Search current user's friends libraries
+    	System.out.println("\nSearching for Stair in friends: \n");
+    	
+    	for (Song song : bart.mMngr.searchFriendsMusic(bart.getUser(), "stair"))
+    		System.out.println(song);
     }
     
     public UI()

@@ -66,6 +66,16 @@ class MusicManager
 		return null;
 	}
 	
+	public List<Song> searchFriendsMusic(User user, String query)
+	{
+		List<Song> result = new LinkedList<Song>();
+		
+		for (User u : user.getFriends())
+			result.addAll(u.getLibrary().search(query));
+		
+		return result;
+	}
+	
 	//search for friends based on a song, returns a list of friends
 	public List<User> searchFriendsMusic(User user, Song song)
 	{
@@ -83,7 +93,7 @@ class MusicManager
 		List<User> result = new LinkedList<User>();
 		
 		for (User u : coll) {
-			if (u.getLibrary().toList().contains(song))
+			if (u.getLibrary().contains(song))
 				result.add(u);
 		}
 		

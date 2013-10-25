@@ -33,8 +33,10 @@ class User
 	public void acceptInvite(User friend)
 	{
 		if (this.invites.contains(friend)) {
-			if (!this.isFriendsWith(friend))
+			if (!this.isFriendsWith(friend)) {
 				this.myfriends.add(friend);
+				friend.getFriends().add(this);
+			}
 			
 			this.invites.remove(friend);
 		}
