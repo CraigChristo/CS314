@@ -14,16 +14,22 @@ class Song
 	//public methods
 	
 	public Song(String name, String artist) {
+
 		this.name = name;
+		
 		data = new Metadata();
         data.put("artist", artist);
+		data.put("name", name);
 	}
 	
 	public Song(String name, String[][] arr) {
 		this.name = name;
+		
 		data = new Metadata(arr);
+		data.put("name", name);
 	}
 	
+	//TODO: Throw an error when there is no name;
 	public Song(String[][] arr) {
 		data = new Metadata(arr);
 		
@@ -31,8 +37,9 @@ class Song
 	}
 	
 	public Song(Metadata m) {
-		this.name = m.get("name");
 		this.data = m;
+		
+		this.name = data.get("name");
 	}
 	
 	public String toString() {

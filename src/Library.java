@@ -13,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.tools.javac.util.Pair;
+
 
 
 class Library implements Iterable<Song>
@@ -189,8 +189,10 @@ class Library implements Iterable<Song>
 	{
 		List<Song> result = new LinkedList<Song>();
 		
+		query = query.toLowerCase();
+		
 		for (Song s : this.songs) {
-			if (s.getName().contains(query) || s.get("artist").contains(query) || s.get("album").contains(query))
+			if (s.getName().toLowerCase().contains(query) || s.get("artist").toLowerCase().contains(query) || s.get("album").toLowerCase().contains(query))
 				result.add(s);
 		}
 		
