@@ -2,6 +2,7 @@
  * @file: Library.java
  * @purpose: consists of Library properties and actions, including playlist
  */
+package edu.SouthernComfort.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,7 +20,10 @@ import java.util.Map;
 class Library implements Iterable<Song>
 {
     //private data members
-	private List<Song> songs;
+	private List<Song> owned;
+	private List<Song> borrowed;
+	private List<Song> loaned;
+	
 	private Hashtable<String, Library> playlists;
 	private User owner;
 	
@@ -42,14 +46,14 @@ class Library implements Iterable<Song>
 	}
 	
 	private void makeLibrary(Object owner, List<Song> songs) {
-		this.songs = songs;
+		this.owned = songs;
 		this.playlists = new Hashtable<String, Library>();
 		this.owner = (User) owner;
 		
 		this.friendBorrowLimit = new Hashtable<String, Dictionary<String, Pair<borrowSetting, Integer>>>();
 		
-		//Set default borrow limit to 10 borrows
-		setDefaultBorrowLimit(10, borrowSetting.LIMIT);
+		//Set default borrow limit to 3 borrows
+		setDefaultBorrowLimit(3, borrowSetting.LIMIT);
 	}
 	
 	public User getOwner() 
@@ -146,20 +150,20 @@ class Library implements Iterable<Song>
 	public void addSong(Song a)
 	{
 		if (!this.contains(a))
-			songs.add(a);
+			owned.add(a);
 	}
 	
 	public void addSongs(Collection<Song> songs)
 	{
-		this.songs.addAll(songs);
+		this.owned.addAll(songs);
 	}
 	
 	//remove a song from the user library
 	public void removeSong(Song b)
 	{
-		for (int i = 0; i < songs.size(); i++){
-			if(songs.get(i).isEqual(b)){
-				songs.remove(i);
+		for (int i = 0; i < owned.size(); i++){
+			if(owned.get(i).isEqual(b)){
+				owned.remove(i);
 			}
 		}
 	}
@@ -169,9 +173,17 @@ class Library implements Iterable<Song>
 		Pair<borrowSetting, Integer> curr = getSongLimit(user, song);
 		
 		//If song can be borrowed
-		if (curr.snd > 0)
-			return true;
+		if (curr.fst != borrowSetting.NO && curr.snd > 0) {
+			this.loaned.add(song);
+		}
 		
+		return false;
+	}
+	
+	public boolean unborrowSong(Song song)
+	{
+		if (this.loaned.remove(song)) 
+			return true;
 		return false;
 	}
 	
@@ -182,7 +194,7 @@ class Library implements Iterable<Song>
 	}
 	
 	public boolean contains(Song song) {
-		return songs.contains(song);
+		return toList().contains(song);
 	}
 	
 	//display the user's library based on the string value(artist, song ,album)
@@ -192,7 +204,7 @@ class Library implements Iterable<Song>
 		
 		query = query.toLowerCase();
 		
-		for (Song s : this.songs) {
+		for (Song s : toList()) {
 			if (s.getName().toLowerCase().contains(query) || s.get("artist").toLowerCase().contains(query) || s.get("album").toLowerCase().contains(query))
 				result.add(s);
 		}
@@ -201,19 +213,24 @@ class Library implements Iterable<Song>
 	}	
 	
 	public List<Song> toList() {
-		return songs;
+		List<Song> result = new LinkedList<Song>();
+		
+		result.addAll(this.owned);
+		result.addAll(borrowed);
+		
+		return result;
 	}
 	
 	public List<Song> toSortedList(String sortBy)
 	{
-		List<Song> result = new LinkedList<Song>(songs);
+		List<Song> result = new LinkedList<Song>(owned);
 		Collections.sort(result,  new Song.SongComparator(sortBy));
 		return result;
 	}
 	
 	//Return songs owned by this user
 	public List<Song> owned() {
-		return songs;
+		return owned;
 	}
 	
 	//check if a song can be borrowed
@@ -235,7 +252,7 @@ class Library implements Iterable<Song>
 	
 	@Override
 	public Iterator<Song> iterator() {
-		return songs.iterator();
+		return owned.iterator();
 	}
 
 	public Library getPlaylist(String name) {

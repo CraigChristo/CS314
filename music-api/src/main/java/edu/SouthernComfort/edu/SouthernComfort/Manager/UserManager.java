@@ -2,6 +2,7 @@
  * @file: UserManager.java
  * @purpose: manages user relationships and actions
  */
+package edu.SouthernComfort.Manager;
 
 import java.util.Hashtable;
 import java.util.Iterator;

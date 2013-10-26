@@ -2,6 +2,7 @@
  * @file: Song.java
  * @purpose: consists of song meta data
  */
+package edu.SouthernComfort.Model;
 
 import java.util.Comparator;
 import java.util.List;

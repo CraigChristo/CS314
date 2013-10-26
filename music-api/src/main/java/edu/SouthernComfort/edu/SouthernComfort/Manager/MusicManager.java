@@ -2,6 +2,7 @@
  * @file: MusicManager.java
  * @purpose: manages music relationships and actions
  */
+package edu.SouthernComfort.Manager;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
