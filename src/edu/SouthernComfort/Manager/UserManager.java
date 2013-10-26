@@ -2,11 +2,14 @@
  * @file: UserManager.java
  * @purpose: manages user relationships and actions
  */
+package edu.SouthernComfort.Manager;
 
 import java.util.Hashtable;
 import java.util.Iterator;
 
-class UserManager implements Iterable<User>
+import edu.SouthernComfort.Model.*;
+
+public class UserManager implements Iterable<User>
 {
 	//Singleton
 	private static UserManager me;

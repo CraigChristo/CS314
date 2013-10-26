@@ -2,12 +2,13 @@
  * @file: User.java
  * @purpose: consists of User properties and actions
  */
+package edu.SouthernComfort.Model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 
-class User
+public class User
 {
     //private data members
 	private String username;

@@ -2,6 +2,7 @@
  * @file: Library.java
  * @purpose: consists of Library properties and actions, including playlist
  */
+package edu.SouthernComfort.Model;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 
 
-class Library implements Iterable<Song>
+public class Library implements Iterable<Song>
 {
     //private data members
 	private List<Song> owned;

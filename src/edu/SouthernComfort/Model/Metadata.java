@@ -1,3 +1,5 @@
+package edu.SouthernComfort.Model;
+
 import java.util.Hashtable;
 
 @SuppressWarnings("serial")

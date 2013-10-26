@@ -1,3 +1,5 @@
+package edu.SouthernComfort.Model;
+
 public class Pair<F, S> {
     public F fst; //first member of pair
     public S snd; //second member of pair
