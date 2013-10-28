@@ -3,9 +3,38 @@ CS314 - Software Development Methods
 
 Repository for Programming Assignment 2 (and 3)
 
------------------
-### I'm making the project a maven project to add [Jersey](https://jersey.java.net/) to it
-### Shits moved
+### Now uses Maven to run a Grizzly servlet/container with [Jersey](https://jersey.java.net/)
+
+Getting Maven
+-------------
+Use a package manager:  
+
+  ###Linux  
+    `yum install -y maven`
+
+  ###Mac (Homebrew)  
+    `brew install maven`
+
+[Or get the binaries](http://maven.apache.org/download.cgi)
+
+Building the project
+--------------------
+
+**Run** 
+
+  1.  `mvn clean compile`
+  2.  `mvn exec:java`
+
+**Test**
+
+  1.  `mvn clean test`
+
+Creating an eclipse project
+---------------------------
+1.  `cd` into `./music-api`
+2.  run: `mvn eclipse:eclipse`
+3.  Import the project from the music-api folder
+
 
 Project structure
 -----------------

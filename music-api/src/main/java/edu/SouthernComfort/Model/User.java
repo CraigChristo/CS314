@@ -7,8 +7,10 @@ package edu.SouthernComfort.Model;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.json.*;
 
-class User
+
+public class User
 {
     //private data members
 	private String username;
@@ -131,4 +133,25 @@ class User
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public JsonObject toJson() {
+		JsonArrayBuilder friendsList = Json.createArrayBuilder();
+		
+		for (User friend : this.myfriends)
+			friendsList.add(friend.getName());
+		
+		JsonArrayBuilder inviteList = Json.createArrayBuilder();
+		
+		for (User user : this.invites)
+			inviteList.add(user.getName());
+		
+		return Json.createObjectBuilder()
+    			.add("username", this.username)
+    			.add("password", this.password)
+    			.add("social", Json.createObjectBuilder()
+    					.add("friends", friendsList.build())
+						.add("invites", inviteList.build())
+					)
+				.build();
+    }
 }

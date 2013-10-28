@@ -17,7 +17,7 @@ import java.util.Map;
 
 
 
-class Library implements Iterable<Song>
+public class Library implements Iterable<Song>
 {
     //private data members
 	private List<Song> owned;

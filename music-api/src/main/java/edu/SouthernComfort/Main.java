@@ -3,13 +3,15 @@ package edu.SouthernComfort;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
+import javax.json.stream.JsonGenerator;
 
-import edu.SouthernComfort.REST.Song;
-import edu.SouthernComfort.REST.UI;
-import edu.SouthernComfort.REST.User;
+import edu.SouthernComfort.Model.*;
+import edu.SouthernComfort.Manager.*;
+import edu.SouthernComfort.REST.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +22,7 @@ import java.util.Map;
 
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/myapp/";
+    public static final String BASE_URI = "http://localhost:8080/music/";
 
     /**
      * Starts Grizzly HTTP server exposing JAX-RS resources defined in this application.
@@ -28,8 +30,9 @@ public class Main {
      */
     public static HttpServer startServer() {
         // create a resource config that scans for JAX-RS resources and providers
-        // in edu.SouthernComfort package
-        final ResourceConfig rc = new ResourceConfig().packages("edu.SouthernComfort");
+        // in edu.SouthernComfort.REST package
+        final ResourceConfig rc = new ResourceConfig().packages("edu.SouthernComfort.REST")
+        .property(JsonGenerator.PRETTY_PRINTING, true);
 
         // create and start a new instance of grizzly http server
         // exposing the Jersey application at BASE_URI

@@ -12,8 +12,10 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import edu.SouthernComfort.Model.*;
 
-class MusicManager 
+
+public class MusicManager 
 {
 	//Singleton
 	private static MusicManager me;

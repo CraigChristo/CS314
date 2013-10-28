@@ -6,8 +6,12 @@ package edu.SouthernComfort.Manager;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-class UserManager implements Iterable<User>
+import edu.SouthernComfort.Model.*;
+
+public class UserManager implements Iterable<User>
 {
 	//Singleton
 	private static UserManager me;
@@ -37,6 +41,10 @@ class UserManager implements Iterable<User>
     public User findUser(String name)
     {
     	return users.get(name);
+    }
+    
+    public List<User> toList() {
+    	return new LinkedList<User>(users.values());
     }
 
 	@Override

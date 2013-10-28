@@ -3,6 +3,9 @@ package edu.SouthernComfort.REST;
 import java.util.List;
 import java.util.Map;
 
+import edu.SouthernComfort.Manager.*;
+import edu.SouthernComfort.Model.*;
+
 /*
  * @file: UI.java
  * @purpose: User interface for PA2
@@ -11,7 +14,7 @@ import java.util.Map;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-class UI
+public class UI
 {
 	private static String[][] songMeta = {
 		{"name", "Funkotonic"},
