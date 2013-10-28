@@ -1,5 +1,7 @@
 package edu.SouthernComfort.REST;
 
+import java.util.Collection;
+
 import javax.json.*;
 
 public class QuickJson {
@@ -20,6 +22,24 @@ public class QuickJson {
 		
 		b.addNull(string);
 		
+		return b.build();
+	}
+	
+	public static <T> JsonArray build(Collection<T> c) {
+		JsonArrayBuilder b = Json.createArrayBuilder();		
+		
+		for (T t : c)
+			b.add(t.toString());
+			
+		return b.build();
+	}
+	
+	public static JsonArray buildFromJson(Collection<? extends JsonValue> c) {
+		JsonArrayBuilder b = Json.createArrayBuilder();		
+		
+		for (JsonValue v : c)
+			b.add(v);
+			
 		return b.build();
 	}
 }

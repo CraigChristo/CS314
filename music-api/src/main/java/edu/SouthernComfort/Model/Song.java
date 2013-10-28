@@ -77,7 +77,7 @@ public class Song
 		return false;
 	}
 	
-	static class SongComparator implements Comparator<Song> {
+	public static class SongComparator implements Comparator<Song> {
 		public String sortBy;
 		
 		public SongComparator(String query) {

@@ -4,6 +4,7 @@
  */
 package edu.SouthernComfort.Manager;
 
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -64,8 +65,15 @@ public class MusicManager
 	//search for songs based on a friend, returns a list of songs that the friend owns
 	public List<Song> searchFriendsMusic(User user, User friend)
 	{
-		if (user.isFriendsWith(friend))
-			return friend.getLibrary().owned();
+		return searchFriendsMusic(user, friend, "name");
+	}
+	public List<Song> searchFriendsMusic(User user, User friend, String sortBy)
+	{
+		if (user.isFriendsWith(friend)) {
+			List<Song> result = friend.getLibrary().owned();
+			Collections.sort(result, new Song.SongComparator(sortBy));
+			return result;
+		}
 		return null;
 	}
 	

@@ -1,11 +1,16 @@
 package edu.SouthernComfort.Model;
 
 import java.util.Hashtable;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class Metadata extends Hashtable<String, String> {
 	public Metadata() {
 		super();
+	}
+	
+	public Metadata(Map<String, String> map) {
+		super(map);
 	}
 	
 	public Metadata(String[][] coll) {

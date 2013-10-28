@@ -33,7 +33,7 @@ public class Library implements Iterable<Song>
 	
 	public Library()
 	{
-		makeLibrary(null, new ArrayList<Song>());
+		makeLibrary(null);
 	}
 	
 	public Library(List<Song> songs2) {
@@ -42,11 +42,17 @@ public class Library implements Iterable<Song>
 	
 	public Library(User user)
 	{
-		makeLibrary(user, new ArrayList<Song>());
+		makeLibrary(user);
+	}
+	
+	private void makeLibrary(Object owner) {
+		makeLibrary(owner, new ArrayList<Song>());
 	}
 	
 	private void makeLibrary(Object owner, List<Song> songs) {
 		this.owned = songs;
+		this.borrowed = new ArrayList<Song>();
+		this.loaned = new ArrayList<Song>();
 		this.playlists = new Hashtable<String, Library>();
 		this.owner = (User) owner;
 		
