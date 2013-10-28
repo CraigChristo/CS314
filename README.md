@@ -29,6 +29,11 @@ Building the project
 
   1.  `mvn clean test`
 
+Using CURL to test the project
+------------------------------
+
+`curl -x[GET|PUT|DELETE] -H "Content-Type: application/json" -H "user: {username}" -data '{"json": "here"}'`
+
 Creating an eclipse project
 ---------------------------
 1.  `cd` into `./music-api`
