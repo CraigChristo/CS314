@@ -32,7 +32,7 @@ Building the project
 Using CURL to test the project
 ------------------------------
 
-`curl -x[GET|PUT|DELETE] -H "Content-Type: application/json" -H "user: {username}" -data '{"json": "here"}'`
+`curl localhost:8080/music/[endpoint] -X[GET|PUT|DELETE] -H "Content-Type: application/json" -H "user: username" -data '{"json": "here"}'`
 
 Creating an eclipse project
 ---------------------------
