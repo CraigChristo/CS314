@@ -38,6 +38,7 @@ Creating an eclipse project
 
 Project structure
 -----------------
+<<<<<<< HEAD
 *  diagrams  
 *  music-api  
   *  pom.xml -- main maven config  
@@ -54,3 +55,20 @@ Project structure
   *  fragments  
   *  css  
   *  js  
+=======
+# I've branched to work on the UI
+## The project structure changed significantly
+### We should try to get all new work to match the package structure of the [web-ui branch](https://github.com/d3dc/CS314/tree/web-ui)
+### I.E 
+
+    *  **src/**  
+    *  main/  
+      *  java/  
+        *  edu/
+          *  SouthernComfort/  
+            *  Manager/ 
+            *  Model/ 
+            *  REST/  
+
+            *  main.java  
+>>>>>>> upstream/master
