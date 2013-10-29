@@ -14,9 +14,9 @@
         // Add your server hostnames to the appropriate arrays. ($_SERVER['HTTP_HOST'])
         // Each array item should be a regular expression. This gives you the option to detect a whole range
         // of server names if needed. Otherwise, you can simply detect a single server like '/^servername\.com$/'
-        private $productionServers = array('/^your-domain\.com$/');
-        private $stagingServers    = array('/^[www\.]*cs\.colostate\.edu$/');
-        private $localServers      = array('/^localhost[:\d]*$/', '/^rocketbadger.dyndns.org[:\d]*$/');
+        private $productionServers = array('');
+        private $stagingServers    = array('');
+        private $localServers      = array('');
 
         // Standard Config Options...
 
@@ -111,13 +111,13 @@
 
             define('WEB_ROOT', '');
 
-            $this->dbReadHost      = '129.82.47.184:3666';
-            $this->dbWriteHost     = '129.82.47.184:3666';
-            $this->dbName          = 'rad_calc';
-            $this->dbReadUsername  = 'rad_calc';
-            $this->dbWriteUsername = 'rad_calc';
-            $this->dbReadPassword  = 'erhs';
-            $this->dbWritePassword = 'erhs';
+            $this->dbReadHost      = '';
+            $this->dbWriteHost     = '';
+            $this->dbName          = '';
+            $this->dbReadUsername  = '';
+            $this->dbWriteUsername = '';
+            $this->dbReadPassword  = '';
+            $this->dbWritePassword = '';
             $this->dbOnError       = 'die';
             $this->dbEmailOnError  = false;
         }
@@ -126,17 +126,17 @@
         private function local()
         {
             ini_set('display_errors', '1');
-            ini_set('error_reporting', E_ALL ^ E_DEPRECATED);
+            ini_set('error_reporting', E_ALL);
 
             define('WEB_ROOT', '');
 
-            $this->dbReadHost      = 'localhost';
-            $this->dbWriteHost     = 'localhost';
-            $this->dbName          = 'rad_calc';
-            $this->dbReadUsername  = 'rad_calc';
-            $this->dbWriteUsername = 'rad_calc';
-            $this->dbReadPassword  = 'erhs';
-            $this->dbWritePassword = 'erhs';
+            $this->dbReadHost      = '';
+            $this->dbWriteHost     = '';
+            $this->dbName          = '';
+            $this->dbReadUsername  = '';
+            $this->dbWriteUsername = '';
+            $this->dbReadPassword  = '';
+            $this->dbWritePassword = '';
             $this->dbOnError       = false;
             $this->dbEmailOnError  = false;
         }
@@ -149,13 +149,13 @@
 
             define('WEB_ROOT', '');
 
-            $this->dbReadHost      = 'localhost';
-            $this->dbWriteHost     = 'localhost';
-            $this->dbName          = 'rad_calc';
-            $this->dbReadUsername  = 'rad_calc';
-            $this->dbWriteUsername = 'rad_calc';
-            $this->dbReadPassword  = 'erhs';
-            $this->dbWritePassword = 'erhs';
+            $this->dbReadHost      = '';
+            $this->dbWriteHost     = '';
+            $this->dbName          = '';
+            $this->dbReadUsername  = '';
+            $this->dbWriteUsername = '';
+            $this->dbReadPassword  = '';
+            $this->dbWritePassword = '';
             $this->dbOnError       = false;
             $this->dbEmailOnError  = false;
         }

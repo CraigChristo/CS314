@@ -1,6 +1,6 @@
 <?PHP
     // Application flag
-    define('RDC', true);
+    define('CS314', true);
 
     // https://twitter.com/#!/marcoarment/status/59089853433921537
     date_default_timezone_set('America/Denver');
@@ -10,8 +10,6 @@
 
     // Global include files
     require DOC_ROOT . '/includes/functions.inc.php';  // spl_autoload_register() is contained in this file
-    require DOC_ROOT . '/includes/class.dbobject.php'; // DBOBject...
-    require DOC_ROOT . '/includes/class.objects.php';  // and its subclasses
 
     // Fix magic quotes
     if(get_magic_quotes_gpc())
@@ -30,7 +28,7 @@
         DBSession::register();
 
     // Initialize our session
-    session_name('rdc_s');
+    session_name('cs314_pa2');
     session_start();
 
     // Object for tracking and displaying error messages
