@@ -128,11 +128,6 @@ public class User
 		}
 		return false;
 	}
-
-	public void sendBarrow(Song song, User dest) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public JsonObject toJson() {
 		JsonArrayBuilder friendsList = Json.createArrayBuilder();

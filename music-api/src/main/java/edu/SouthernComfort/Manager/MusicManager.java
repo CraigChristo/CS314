@@ -24,15 +24,14 @@ public class MusicManager
     //private data members
 	private UserManager users;
     private Library globalLibrary;
-    
-    private PriorityQueue<Pair<User, Song>> waitingList;
+    private Dictionary<User, Song> borrowedDict;
 
     //private methods
     
     protected MusicManager() {
     	users = UserManager.instance();
     	globalLibrary = new Library();
-    	waitingList = new PriorityQueue<Pair<User,Song>>();
+    	borrowedDict = new Hashtable<User, Song>();
     }
     
 	//public methods
@@ -170,16 +169,31 @@ public class MusicManager
 			globalLibrary.addSong(s);
 	}
 	
-	public void newBorrow(User source, User dest, Song song)
+	public void borrowToLib(User source, User dest, Song song)
     {
-    	if (source.getLibrary().contains(song)) {
-    		if (source.getLibrary().checkIfBorrowable(dest, song))
-    			source.sendBarrow(song, dest);
+		
+		Library srcLib = source.getLibrary();
+		
+		//Song is owned
+    	if (srcLib.isOwned(song)) {
+    		//User has permission
+    		if (srcLib.checkIfBorrowable(dest, song))
+    			//Song isn't already borrowed
+    			srcLib.sendBorrow(dest, song);
 //    		else
-//    			this.waitingList.add();
-    	}
-    		
+//    			No permission
+    	}	
     }
+	
+	public void playSong(User user, Song song)
+	{
+		user.play(song);
+	}
+	
+	public void stopSong(User user)
+	{
+		user.stop();
+	}
 	
 	//take back a borrowed song from the users, Song argument is from the user's library
 	public void takeBack(User user, Song song)
