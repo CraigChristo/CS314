@@ -1,4 +1,13 @@
 <?PHP
+    //Autoload all class.*.form.php
+    spl_autoload_register('form_autoload');
+    function form_autoload($class_name)
+    {
+        $filename = DOC_ROOT . '/includes/class.' . strtolower($class_name) . '.form.php';
+        if(file_exists($filename))
+            require $filename;
+    }
+
   class Form
   {
     public $name;
@@ -95,7 +104,9 @@
             {
                 if ($this->print_labels)
                     echo "<div><label for=\"$i->name\">$i->name</label>";
-                $i->printHTML();
+
+                echo $i->getHTML();
+                
                 if ($this->print_labels)
                     echo "</div>";
             }
@@ -122,44 +133,22 @@
         if (!$empty) echo "});\n";
     }
 
-    public function addText($name = '', $text = '')
+    public function add($elem)
     {
-        $this->items[] = new Text($name, $text);
-    }
-
-    public function addButton($name = '', $options = array(), $onClick = null)
-    {
-        $this->items[] = new Button($name, $options, $onClick);
-    }
-
-    public function addInput($name = '', $options = array())
-    {
-        $this->items[] = new Input($name, $options);
-    }
-
-    public function addSlider($name, $options = array())
-    {
-        $this->items[] = new Slider($name, $options);
-    }
-
-    public function addSelect($name, $options = null, $onChange = null)
-    {
-        $this->items[] = new Select($name, $options, $onChange);
-    }
-
-    public function addRadio($name, $options = null, $onChange = null)
-    {
-        $this->items[] = new Radio($name, $options, $onChange);
+        if(is_subclass_of($elem, "formElem"))
+            $this->items[] = $elem;
+        else
+            throw new InvalidArgumentException("Form section " . $this->name . " expects formElem. Got " . gettype($elem));
     }
   }
 
-  class formable
+  class formElem
   {
     public $name;
     public $id;
     public $options;
 
-    public function formable($name = null, $options = array(), $defaults = array())
+    public function formElem($name = null, $options = array(), $defaults = array())
     {
         $this->name = $name;
         $this->id = slugify($name);
@@ -195,240 +184,13 @@
         }
     }
 
-    public function printHTML(){
+    public function getHTML(){
         return null;
     }
     public function getScript(){
         return null;
     }
     public function getListeners(){
-        return null;
-    }
-  }
-
-  class Text extends formable
-  {
-
-    public function __construct($name = null, $textOrOptions = '')
-    {
-        if (is_string($textOrOptions))
-        {
-            $text = $textOrOptions;
-            $textOrOptions = array('text'=>$text);
-        }
-        parent::__construct($name, $textOrOptions);
-    }
-
-    public function printHTML()
-    {
-        echo $this->text;
-    }
-  }
-
-  class Input extends formable
-  {
-    static $defaults = array(
-                            'type'=>'text',
-                            'value'=>'',
-                            'readOnly'=>'false'
-                        );
-
-    public function __construct($name = null, $options = array())
-    {
-        parent::__construct($name, $options, self::$defaults);
-    }
-
-    public function printHTML()
-    {
-        echo "<input " . 
-            (isset($this->id) ? "name=\"$this->id\" id=\"$this->id\"" : '') .
-            " type=\"$this->type\" value=\"$this->value\"" .
-            ($this->readOnly ? 'readonly' : '') .
-            ">";
-    }
-  }
-
-  class Button extends Input
-  {
-    public $onClick;
-
-    public function __construct($name, $options = array(), $onClick = null)
-    {
-        $this->onClick = $onClick;
-        $options['type'] = 'submit';
-        parent::__construct($name, $options);
-    }
-
-    public function getScript()
-    {
-        return $this->onClick;
-    }
-  }
-
-  class Slider extends formable
-  {
-    static $defaults = array(
-                                    'min'=>0,
-                                    'max'=>10,
-                                    'value'=>5,
-                                    'step'=>'any',
-                                    'ticked'=>false,
-                                    'tickPercent'=>10,
-                                    'tickLabel'=>false
-                                );
-
-    function __construct($name=null, $options=array())
-    {
-        parent::__construct($name, $options, self::$defaults);
-    }
-
-    function printHTML()
-    {
-        // $iValue = ($this->inputScience) ? toScience($this->value) : $this->value; 
-        echo "<input type=\"number\" name=\"$this->id\" id=\"$this->id\" value=\"$this->value\" min=\"$this->min\" max=\"$this->max\" step=\"any\">";
-        echo $this->unit . "\n";
-        echo "<div id=\"{$this->id}Slider\" class=\"slider\"></div>\n";
-    }
-
-    function getScript()
-    {
-        $step = ($this->step == 'any') ? 1 : $this->step;
-
-        if ($this->ticked)
-        {
-            $interval;
-            if ($this->tickTens)
-            {
-                //logrithmic resolution
-                $num = is_numeric($this->tickTens) ? $this->tickTens : 0;
-                $interval = round($this->max-$this->min);
-                $num = sigFigs($interval)-$num;
-                $interval = pow(10,$num);
-
-            }
-            else
-            {
-                $interval = (round($this->max-$this->min)*$this->tickPercent)/ 100;
-                $interval = round($interval, -sigFigs($interval));
-            }
-            return "
-                $( '#{$this->id}Slider' ).labeledslider({ 
-                    min: $this->min,
-                    max: $this->max,
-                    value: $this->value,
-                    step: $step,
-                    tickInterval: $interval,
-                    change: function(event, ui) {
-                        $('input#$this->id').val(ui.value);
-                    } 
-                });
-                $( '$this->id' ).change(function() {
-                    $( '#{$this->id}Slider' ).slider( 'value', this.value );
-                });";
-        }
-        else
-        {
-            return "
-                $( '#{$this->id}Slider' ).slider({ 
-                    min: $this->min,
-                    max: $this->max,
-                    value: $this->value,
-                    step: $step,
-                    change: function(event, ui) {
-                        $('input#$this->id').val(ui.value);
-                    } 
-                });
-                $( '$this->id' ).change(function() {
-                    $( '#{$this->id}Slider' ).slider( 'value', this.value );
-                });";
-        }
-    }
-  }
-
-  class Select extends formable
-  {
-    public $items;
-
-    static $defaults = array(
-                                    'selected'=>false,
-                                    'hasDefault'=>true,
-                                    'onChange'=>null
-                                );
-
-    public function __construct($name = null, $options = array(), $items = array())
-    {
-        $this->items = $items;
-
-        parent::__construct($name, $options, self::$defaults);
-    }
-
-    public function printHTML()
-    {
-        echo "<select name=\"$this->id\" id=\"$this->id\">\n";
-
-        //Print -- option
-        if ($this->hasDefault) $this->printOption();
-        
-        foreach ($this->items as $key=>$name)
-        {
-            $select = ($key == $this->selected) ? true : false;
-            $this->printOption($key, $name, $select);
-        }
-        echo "</select>";
-    }
-
-    private function printOption($value = 0, $name = '--', $selected = false)
-    {
-        echo "<option value=\"$value\" " . ($selected ? 'selected' : '') . ">$name</option>\n";
-    }
-
-    public function getScript()
-    {
-        if (isset($this->onChange))
-            return "$('$this->id').change(function() {\n
-                        $this->onChange\n
-                    });";
-        return null;
-    }
-  }
-
-  class Radio extends formable
-  {
-    public $items;
-
-    static $defaults = array(
-                                'selected'=>false,
-                                'onChange'=>null
-                            );
-
-    public function __construct($name = null, $options = array(), $items = array())
-    {
-        $this->items = $items;
-
-        parent::__construct($name, $options, self::$defaults);
-    }
-
-    public function printHTML()
-    {
-        foreach ($this->items as $key=>$name)
-        {
-            $select = ($key == $this->selected) ? true : false;
-            $this->printRadio($this->id, $key, $name, $select);
-        }
-        echo "</select>";
-    }
-
-    private function printRadio($name, $value, $display, $selected = false)
-    {
-        echo "<input type=\"radio\" name=\"$name\" value=\"$value\" " . ($selected ? 'checked' : '') . " />$display\n";
-    }
-
-    public function getScript()
-    {
-        if (isset($this->onChange))
-            return "$('$this->id').change(function() {\n
-                        $this->onChange\n
-                    });";
         return null;
     }
   }
