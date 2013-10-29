@@ -5,9 +5,12 @@
 package edu.SouthernComfort.Model;
 
 import java.util.Comparator;
+import java.util.Dictionary;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import edu.SouthernComfort.Model.Library.borrowSetting;
 
 public class Song
 {

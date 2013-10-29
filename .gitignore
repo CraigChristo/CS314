@@ -1,3 +1,8 @@
 /.project
 /bin
+/music-api/bin
+/music-api/.project
+/music-api/.classpath
+/music-api/.settings
 /music-api/target
+
