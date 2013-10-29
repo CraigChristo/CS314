@@ -9,7 +9,8 @@ class RestRequest
     protected $requestLength;  
 
     protected $username;  
-    protected $password;  
+    protected $password;
+    protected $basicAuth; 
 
     protected $acceptType;  
 
@@ -146,7 +147,10 @@ class RestRequest
     protected function setAuth(&$curlHandle)  
     {  
         if(isset($this->username) && isset($this->password)) {
-            curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+            
+            if (!$this->basicAuth)
+                curl_setopt($curlHandle, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
+
             curl_setopt($curlHandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         }
     }
@@ -206,7 +210,17 @@ class RestRequest
     public function setUsername($username)
     {
         $this->username = $username;
-    } 
+    }
+
+    public function getBasicAuth()
+    {
+        return $this->basicAuth;
+    }
+
+    public function setBasicAuth($bool)
+    {
+        if (is_bool($bool)) $this->basicAuth = $bool;
+    }
     
     public function getVerb()
     {
