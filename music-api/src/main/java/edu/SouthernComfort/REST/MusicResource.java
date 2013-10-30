@@ -27,7 +27,7 @@ import edu.SouthernComfort.Model.User;
  * User resource (exposed at "users" path)
  */
 @Path("/")
-public class UserResource {
+public class MusicResource {
 	
 	private static UserManager users = UserManager.instance();
 	private static MusicManager music = MusicManager.instance();
