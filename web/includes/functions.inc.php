@@ -32,12 +32,18 @@
         return $count;
     }
 
-    function getOrElse($key, $array = array(), $default = null) {
+    function getKeyOrElse($key, $array = array(), $default = null) {
         if (isset($array[$key]))
         {
             return $array[$key];
         }
         return $default;
+    }
+
+    function getOrElse($value, $default = null) {
+        if (isset($value))
+            return $value;
+        else return $default;
     }
 
     function set_option($key, $val)

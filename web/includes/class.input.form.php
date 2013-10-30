@@ -5,7 +5,7 @@
     static $defaults = array(
                             'type'=>'text',
                             'value'=>'',
-                            'readOnly'=>'false'
+                            'readOnly'=>false
                         );
 
     public function __construct($name = null, $options = array())
