@@ -14,30 +14,15 @@
         // Add your server hostnames to the appropriate arrays. ($_SERVER['HTTP_HOST'])
         // Each array item should be a regular expression. This gives you the option to detect a whole range
         // of server names if needed. Otherwise, you can simply detect a single server like '/^servername\.com$/'
-        private $productionServers = array('');
-        private $stagingServers    = array('');
-        private $localServers      = array('');
+        private $productionServers = array('/server\.com$/');
+        private $stagingServers    = array('/server\.com$/');
+        private $localServers      = array('/server\.com$/');
 
         // Standard Config Options...
-
-        // ...For Auth Class
-        public $authDomain;         // Domain to set for the cookie
-        public $authSalt;           // Can be any random string of characters
-
-        // ...For Database Class
-        public $dbReadHost;   // Database read-only server
-        public $dbWriteHost;  // Database read/write server
-        public $dbName;
-        public $dbReadUsername;
-        public $dbWriteUsername;
-        public $dbReadPassword;
-        public $dbWritePassword;
-
-        public $dbOnError; // What do do on a database error (see class.database.php for details)
-        public $dbEmailOnError; // Email an error report on error?
+        // I removed these
         
         // Add your config options here...
-        public $useDBSessions; // Set to true to store sessions in the database
+        public $restURL;
 
         // Singleton constructor
         private function __construct()
@@ -77,12 +62,7 @@
         // Add code to be run on all servers
         private function everywhere()
         {
-            // Store sesions in the database?
-            $this->useDBSessions = false;
-
-            // Settings for the Auth class
-            $this->authDomain = $_SERVER['HTTP_HOST'];
-            $this->authSalt   = '';
+            $this->restURL = 'localhost:8080/music';
         }
 
         // Add code/variables to be run only on production servers
@@ -91,16 +71,6 @@
             ini_set('display_errors', '0');
 
             define('WEB_ROOT', '/');
-
-            $this->dbReadHost      = '';
-            $this->dbWriteHost     = '';
-            $this->dbName          = '';
-            $this->dbReadUsername  = '';
-            $this->dbWriteUsername = '';
-            $this->dbReadPassword  = '';
-            $this->dbWritePassword = '';
-            $this->dbOnError       = '';
-            $this->dbEmailOnError  = false;
         }
 
         // Add code/variables to be run only on staging servers
@@ -110,16 +80,6 @@
             ini_set('error_reporting', E_ALL);
 
             define('WEB_ROOT', '');
-
-            $this->dbReadHost      = '';
-            $this->dbWriteHost     = '';
-            $this->dbName          = '';
-            $this->dbReadUsername  = '';
-            $this->dbWriteUsername = '';
-            $this->dbReadPassword  = '';
-            $this->dbWritePassword = '';
-            $this->dbOnError       = 'die';
-            $this->dbEmailOnError  = false;
         }
 
         // Add code/variables to be run only on local (testing) servers
@@ -129,16 +89,6 @@
             ini_set('error_reporting', E_ALL);
 
             define('WEB_ROOT', '');
-
-            $this->dbReadHost      = '';
-            $this->dbWriteHost     = '';
-            $this->dbName          = '';
-            $this->dbReadUsername  = '';
-            $this->dbWriteUsername = '';
-            $this->dbReadPassword  = '';
-            $this->dbWritePassword = '';
-            $this->dbOnError       = false;
-            $this->dbEmailOnError  = false;
         }
 
         // Add code/variables to be run only on when script is launched from the shell
@@ -148,16 +98,6 @@
             ini_set('error_reporting', E_ALL);
 
             define('WEB_ROOT', '');
-
-            $this->dbReadHost      = '';
-            $this->dbWriteHost     = '';
-            $this->dbName          = '';
-            $this->dbReadUsername  = '';
-            $this->dbWriteUsername = '';
-            $this->dbReadPassword  = '';
-            $this->dbWritePassword = '';
-            $this->dbOnError       = false;
-            $this->dbEmailOnError  = false;
         }
 
         public function whereAmI()

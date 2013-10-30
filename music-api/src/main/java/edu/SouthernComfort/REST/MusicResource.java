@@ -1,8 +1,10 @@
 package edu.SouthernComfort.REST;
 
 import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -17,19 +19,21 @@ import javax.ws.rs.core.MediaType;
 import javax.json.*;
 
 import edu.SouthernComfort.Manager.*;
+import edu.SouthernComfort.Model.Metadata;
+import edu.SouthernComfort.Model.Song;
 import edu.SouthernComfort.Model.User;
 
 /**
  * User resource (exposed at "users" path)
  */
-@Path("/users")
-public class UserResource {
+@Path("/")
+public class MusicResource {
 	
 	private static UserManager users = UserManager.instance();
 	private static MusicManager music = MusicManager.instance();
 
     
-	@GET
+	@GET @Path("/users")
 	@Produces(MediaType.APPLICATION_JSON)
 	public JsonArray getUserList() {
 		List<JsonObject> result = new LinkedList<JsonObject>();
@@ -39,7 +43,7 @@ public class UserResource {
 		return QuickJson.buildFromJson(result);
 	}
 	
-    @GET @Path("/{username}")
+    @GET @Path("/users/{username}")
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getUser(@PathParam("username") String username) {
         User result = users.findUser(username);
@@ -49,7 +53,40 @@ public class UserResource {
     		return QuickJson.build("Not found");
     }
     
-    @GET @Path("/{username}/library")
+    @PUT @Path("/users")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject addUser(@QueryParam("username") String username, @QueryParam("password") String password)) {
+    	try {
+    		users.addUser(
+    				new User(
+    						username,
+    						password
+					));
+    		
+    		User result = users.findUser(obj.getString("username"));
+    		
+    		if ( result != null )
+    			return result.toJson();
+    		else
+    			return QuickJson.build("Error creating user");
+    	} catch (NullPointerException e) {
+    		return QuickJson.build("Invalid arguments");
+    	}
+    }
+
+    
+	@GET @Path("/library")
+	@Produces(MediaType.APPLICATION_JSON)
+	public JsonValue getLibrary(@HeaderParam("user") String username, @QueryParam("sortby") @DefaultValue("name") String sortBy) {
+		if (username == null)
+			return QuickJson.build("A valid user is required");
+		
+		User user = users.findUser(username);
+		
+		return QuickJson.build(user.getLibrary().toSortedList(sortBy));
+	}
+	
+    @GET @Path("/users/{username}/library")
     @Produces(MediaType.APPLICATION_JSON)
     public JsonValue getLibrary(@HeaderParam("user") String fromUser, @PathParam("username") String toUser, @QueryParam("sortby") @DefaultValue("name") String sortBy) {
         if (fromUser == null || toUser == null)
@@ -70,23 +107,24 @@ public class UserResource {
         	
     }
     
-    @PUT
+    @PUT @Path("/library")
     @Consumes(MediaType.APPLICATION_JSON) 
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonObject addUser(JsonObject obj) {
-    	try {
-    		users.addUser(
-    				new User(
-    						obj.getString("username"),
-    						obj.getString("password")
-					));
+    public JsonObject addSong(@HeaderParam("user") String username, JsonObject obj) {
+    	try {    		
+    		User user = users.findUser(username);
     		
-    		User result = users.findUser(obj.getString("username"));
+    		Map<String, String> parsedObj = new Hashtable<String,String>();
     		
-    		if ( result != null )
-    			return result.toJson();
-    		else
-    			return QuickJson.build("Error creating user");
+    		
+    		for (Map.Entry<String, JsonValue> e : obj.entrySet())
+    			parsedObj.put(e.getKey(), e.getValue().toString());
+    		
+    		Song song = new Song(new Metadata(parsedObj));
+    		
+    		music.addSong(user, song);
+    		
+    		return QuickJson.build(song.toString());
     	} catch (NullPointerException e) {
     		return QuickJson.build("Invalid arguments");
     	}

@@ -12,10 +12,12 @@ class RestRequest
     protected $password;
     protected $basicAuth; 
 
-    protected $acceptType;  
+    protected $acceptType; 
+    protected $HTTPheader;
 
     protected $responseBody;  
-    protected $responseInfo;  
+    protected $responseInfo;
+
   
     public function __construct($verb = 'GET', $url = null, $requestBody = null)  
     {  
@@ -25,7 +27,8 @@ class RestRequest
         $this->requestLength     = 0;  
         $this->username          = null;  
         $this->password          = null;  
-        $this->acceptType        = 'application/json';  
+        $this->acceptType        = 'application/json';
+        $this->HTTPheader        = array();
         $this->responseBody      = null;  
         $this->responseInfo      = null;  
   
@@ -44,7 +47,7 @@ class RestRequest
         $this->responseInfo      = null;  
     }  
   
-    public function do()  
+    public function exec()  
     {  
         $curlHandle = curl_init();
 
@@ -139,9 +142,9 @@ class RestRequest
         curl_setopt($curlHandle, CURLOPT_TIMEOUT, 10);
         curl_setopt($curlHandle, CURLOPT_URL, $this->url);
         curl_setopt($curlHandle, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curlHandle, CURLOPT_HTTPHEADER, array(
-                        'Accept: ' . $this->acceptType
-                    ));
+
+        $this->HTTPheader[] = 'Accept: ' . $this->acceptType;
+        curl_setopt($curlHandle, CURLOPT_HTTPHEADER, $this->HTTPheader);
     }  
   
     protected function setAuth(&$curlHandle)  
@@ -153,6 +156,12 @@ class RestRequest
 
             curl_setopt($curlHandle, CURLOPT_USERPWD, $this->username . ':' . $this->password);
         }
+    }
+
+    public function setExtraHeader($key, $value)
+    {
+        if ($key != 'Accept')
+            $this->HTTPheader[] = $key . ': ' . $value;
     }
 
     public function getAcceptType()

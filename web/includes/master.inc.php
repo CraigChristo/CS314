@@ -10,6 +10,7 @@
 
     // Global include files
     require DOC_ROOT . '/includes/functions.inc.php';  // spl_autoload_register() is contained in this file
+    require DOC_ROOT . '/includes/class.objects.php';
 
     // Fix magic quotes
     if(get_magic_quotes_gpc())
@@ -23,13 +24,6 @@
     // Load our config settings
     $Config = Config::getConfig();
 
-    // Store session info in the database?
-    if(Config::get('useDBSessions') === true)
-        DBSession::register();
-
     // Initialize our session
     session_name('cs314_pa2');
     session_start();
-
-    // Object for tracking and displaying error messages
-    $Error = Error::getError();
