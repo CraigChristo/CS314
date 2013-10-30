@@ -201,7 +201,7 @@ public class Library implements Iterable<Song>
 	
 	public void addBorrowedSong(Song song, int limit, User from)
 	{
-		this.borrowed.put(song, new Pair<Integer, User>(limit, from));
+		this.borrowed.put(song, new Pair<Integer, User>(limit, from);
 	}
 	
 	public void removeBorrowedSong(Song song)
